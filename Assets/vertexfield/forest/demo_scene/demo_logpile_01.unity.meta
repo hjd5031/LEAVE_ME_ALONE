@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cd453e4c3d97f1d44b81d1c6a4183433
+timeCreated: 1521541834
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 114607
+  packageName: Logpile
+  packageVersion: 1.0
+  assetPath: Assets/vertexfield/forest/demo_scene/demo_logpile_01.unity
+  uploadId: 236479
