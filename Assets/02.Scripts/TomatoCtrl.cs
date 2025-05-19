@@ -9,7 +9,7 @@ public class TomatoCtrl : MonoBehaviour
     private GameObject _currentTomato;
 
     public bool isWatering = false;
-
+    public bool isPicked = false;
     private float growTimer = 0f;
     private float growDelay = 3f; // 물을 줄 때마다 3초마다 성장
 
@@ -21,20 +21,36 @@ public class TomatoCtrl : MonoBehaviour
 
     void Update()
     {
-        if (!isWatering) return;
-
-        growTimer += Time.deltaTime;
-
-        if (growTimer >= growDelay)
+        if (!isPicked)
         {
-            Grow();
-            growTimer = 0f;
+            if (!isWatering) return;
+
+            growTimer += Time.deltaTime;
+
+            if (growTimer >= growDelay)
+            {
+                Grow();
+                growTimer = 0f;
+            }
+
+            if (_growthLevel == 4) gameObject.tag = "RipeEnemyTomato";
+        }
+        else
+        {
+            if (_currentTomato != null)
+            {
+                Destroy(_currentTomato);
+            }
+
+            gameObject.tag = "PickedEnemyTomato";
+            _currentTomato = Instantiate(tomatoList[5], transform.position, Quaternion.identity, transform);
+
         }
     }
 
     void Grow()
     {
-        if (_growthLevel + 1 >= tomatoList.Count)
+        if (_growthLevel + 1 >= 5)
         {
             gameObject.tag = "RipeEnemyTomato";
             return;
@@ -42,7 +58,7 @@ public class TomatoCtrl : MonoBehaviour
 
         _growthLevel++;
         SpawnNextTomato(_growthLevel);
-        _currentTomato.tag = "UnripeEnemyTomato"; // 성장 중간도 태그 유지
+        // gameObject.tag = "UnripeEnemyTomato"; // 성장 중간도 태그 유지
     }
 
     void SpawnNextTomato(int level)
