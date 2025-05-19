@@ -1,11 +1,15 @@
+using Unity.Behavior;
 using UnityEngine;
 
 public class EnemyCtrl : MonoBehaviour
 {
+    // public BehaviorGraph graph;
+
+    // public bool isWatering;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        // graph.isWatering = true;
     }
 
     // Update is called once per frame
