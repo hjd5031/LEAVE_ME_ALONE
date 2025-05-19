@@ -5,8 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Targets
-  - EnemyTomato
   - PlayerTomato
+  - RipeEnemyTomato
+  - UnripeEnemyTomato
   layers:
   - Default
   - TransparentFX
