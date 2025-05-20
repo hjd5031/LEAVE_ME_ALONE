@@ -5,8 +5,8 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "isPicked", story: "Change EnemyTomato into isPicked", category: "Action", id: "1f395e416a6420eb9718c1df40893573")]
-public partial class IsPickedAction : Action
+[NodeDescription(name: "IsSeeding", story: "Change Tomato into isSeeding True", category: "Action", id: "037411e309927448979b096128a6852d")]
+public partial class IsSeedingAction : Action
 {
     [SerializeReference] public BlackboardVariable<GameObject> Target;
     [SerializeReference] public BlackboardVariable<bool> Value;
@@ -31,9 +31,9 @@ public partial class IsPickedAction : Action
             return Status.Failure;
         }
 
-        _tomato.isPicked = Value;
+        _tomato.isSeeding = Value;
 
-        Debug.Log($"✅ Target '{targetObj.name}'의 isPicking 값을 {Value}로 설정했습니다.");
+        Debug.Log($"✅ Target '{targetObj.name}'의 isSeeding 값을 {_tomato.isSeeding}로 설정했습니다.");
         return Status.Success;
     }
 }

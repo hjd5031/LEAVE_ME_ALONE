@@ -11,6 +11,8 @@ TagManager:
   - UnripePlayerTomato
   - PickedPlayerTomato
   - PickedEnemyTomato
+  - EnemyisPlantable
+  - PlayerisPlantable
   layers:
   - Default
   - TransparentFX
