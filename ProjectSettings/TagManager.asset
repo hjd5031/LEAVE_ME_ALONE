@@ -5,9 +5,14 @@ TagManager:
   serializedVersion: 3
   tags:
   - Targets
-  - PlayerTomato
   - RipeEnemyTomato
   - UnripeEnemyTomato
+  - RipePlayerTomato
+  - UnripePlayerTomato
+  - PickedPlayerTomato
+  - PickedEnemyTomato
+  - EnemyisPlantable
+  - PlayerisPlantable
   layers:
   - Default
   - TransparentFX
