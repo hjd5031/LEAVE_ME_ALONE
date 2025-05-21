@@ -33,7 +33,7 @@ public partial class IsWateringAction : Action
 
         _tomato.isWatering = Value;
 
-        Debug.Log($"✅ Target '{targetObj.name}'의 isWatering 값을 {Value}로 설정했습니다.");
+        Debug.Log($"✅ Target '{targetObj.name}'의 isWatering 값을 {_tomato.isWatering}로 설정했습니다.");
         return Status.Success;
     }
 }
