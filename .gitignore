@@ -3,7 +3,10 @@
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
 .utmp/
+# Unity generated folders
 /[Ll]ibrary/
+!/Library/PackageCache/
+!/Library/PackageCache/com.unity.behavior@fe41d2b9d6fa/
 /[Tt]emp/
 /[Oo]bj/
 /[Bb]uild/
@@ -11,6 +14,8 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+#exception behavior file
+!/Library/PackageCache/com.unity.behavior@fe41d2b9d6fa
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
