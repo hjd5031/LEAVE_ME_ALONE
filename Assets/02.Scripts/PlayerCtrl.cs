@@ -4,13 +4,16 @@ using UnityEngine;
 public class PlayerCtrl : MonoBehaviour
 {
     public float walkSpeed = 3f;
-    public float runSpeed = 10f;
+    public float runSpeed = 7f;
     public float mouseSensitivity = 3f;
+    public Transform PlayerHead;
 
     private Rigidbody rb;
-    private Vector3 moveDirection;
     private Animator anim;
-    private float yRotation = 0f;
+    private Vector3 inputDirection;
+    private Vector3 moveDirection;
+    private float yRotation = 0f; // 좌우 회전
+    private float xRotation = 0f; // 상하 회전 (PlayerHead에 적용)
 
     void Start()
     {
@@ -19,54 +22,46 @@ public class PlayerCtrl : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        yRotation = transform.eulerAngles.y;
     }
 
     void Update()
     {
-        // 입력 감지
-        float h = Input.GetAxisRaw("Horizontal"); // A/D
-        float v = Input.GetAxisRaw("Vertical");   // W/S
-        // // 마우스 회전 적용
-        // float mouseX = Input.GetAxis("Mouse X");
-        // yRotation += mouseX * mouseSensitivity;
-        // transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
-        moveDirection = Vector3.zero;
+        // 📌 마우스 회전 입력
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
 
-        // 🧭 방향 회전 및 이동 처리
-        if (h != 0)
-        {
-            Vector3 dir = new Vector3(0, 0, h);
-            moveDirection = transform.TransformDirection(dir);
-            float targetY = h < 0 ? 270f : 90f;
-            Quaternion targetRot = Quaternion.Euler(0, targetY, 0);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 15f * Time.deltaTime);
-        }
-        else if (v != 0)
-        {
-            // // 마우스 회전 적용
-            // float mouseX = Input.GetAxis("Mouse X");
-            // yRotation += mouseX * mouseSensitivity;
-            // transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
+        // 좌우 회전: 본체 기준 Y축
+        yRotation += mouseX * mouseSensitivity;
+        transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
 
-            // 앞/뒤 이동
-            Vector3 dir = new Vector3(0, 0, v).normalized;
-            moveDirection = transform.TransformDirection(dir);
+        // 상하 회전: PlayerHead 기준 X축 (pitch)
+        xRotation -= mouseY * mouseSensitivity;
+        xRotation = Mathf.Clamp(xRotation, -30f, 30f);
+        if (PlayerHead != null)
+        {
+            PlayerHead.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         }
 
-        // 🎬 애니메이터 처리
+        // 🎮 입력
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+        inputDirection = new Vector3(h, 0f, v).normalized;
+
+        // 🎬 애니메이션
         if (anim != null)
         {
-            bool isForward = h != 0 || v > 0;
-            anim.SetBool("isTraceForward", isForward);
-            anim.SetBool("isTraceBackward", v < 0);
+            bool isMoving = inputDirection.sqrMagnitude > 0.01f;
+            anim.SetBool("isTraceForward", isMoving);
             anim.SetBool("isShift", Input.GetKey(KeyCode.LeftShift));
         }
     }
 
     void FixedUpdate()
     {
-        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
-        Vector3 move = moveDirection * currentSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + move);
+        float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+        moveDirection = inputDirection * speed * Time.fixedDeltaTime;
+        rb.MovePosition(rb.position + transform.TransformDirection(moveDirection));
     }
 }

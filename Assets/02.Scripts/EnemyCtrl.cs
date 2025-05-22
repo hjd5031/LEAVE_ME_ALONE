@@ -5,14 +5,18 @@ public class EnemyCtrl : MonoBehaviour
 {
     public GameObject sprayer; // 손에 붙은 분무통 오브젝트
     public GameObject basket;  // 손에 붙은 바구니 오브젝트
-
+    public GameObject instantiateCar;
     // public BehaviorGraph graph;
     public bool isWatering = false;
     public bool isPicked = false;
-
+    public bool hasItemCar = false;
     void Update()
     {
         StickToGround();
+        if (hasItemCar)
+        {
+            CheckItemAvailability();
+        }
         // 분무 상태
         if (isWatering)
         {
@@ -45,5 +49,17 @@ public class EnemyCtrl : MonoBehaviour
             pos.y = Mathf.Lerp(pos.y, hit.point.y, 0.2f);
             transform.position = pos;
         }
+    }
+
+    void CheckItemAvailability()
+    {
+        GameObject []PlayerTomato = GameObject.FindGameObjectsWithTag("RipePlayerTomato");
+        {
+            if (PlayerTomato.Length > 3)
+            {
+                Instantiate(instantiateCar, transform.position, Quaternion.identity);
+                hasItemCar = false;
+            }
+        } 
     }
 }

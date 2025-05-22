@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &332987431099281487
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7867292821991508710}
+  - component: {fileID: 8230675870570266584}
+  m_Layer: 0
+  m_Name: RandomCar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7867292821991508710
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332987431099281487}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -21.497097, y: -7.3567934, z: -62.323017}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8230675870570266584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332987431099281487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Graph: {fileID: 35207476838204580, guid: 255724271f04c43c49cfbb288b279437, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 7558958210981823379
+  - rid: 7558958210981823380
+  - rid: 7558958210981823381
+  - rid: 7558958210981823382
+  - rid: 7558958210981823383
+  - rid: 7558958210981823384
+  - rid: 7558958210981823385
+  - rid: 7558958213854134604
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 7558958210981823379
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 332987431099281487}
+    - rid: 7558958210981823380
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 6976389639142559276
+          m_Value1: 1181596404602514608
+        Name: PickupTruckGreen
+        m_Value: {fileID: 1434878004306604846, guid: dfffd7ba02f4c487a87221a125fbe624, type: 3}
+    - rid: 7558958210981823381
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 14735344795467412943
+          m_Value1: 3991026602843485984
+        Name: PickupTruckOrange
+        m_Value: {fileID: 924046384323872714, guid: e20d46e72c4b44c7cbf6ff2fed02d25d, type: 3}
+    - rid: 7558958210981823382
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 4172039592418017029
+          m_Value1: 17807353307475519790
+        Name: PickupTruckRed
+        m_Value: {fileID: 6752546032814518072, guid: 27d378bc30c534d04b62a3ebd7c737f6, type: 3}
+    - rid: 7558958210981823383
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3116205599706358457
+          m_Value1: 11070260039451782712
+        Name: Tractor
+        m_Value: {fileID: 3617458251531492666, guid: c8a25257d38a54c4481ef6b13e533faf, type: 3}
+    - rid: 7558958210981823384
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 6114078396765204234
+          m_Value1: 3800337419750449874
+        Name: PickupTruckBlack
+        m_Value: {fileID: 9160304999753411535, guid: b8d1b60d4c5e048ec9ddebe4761eb25c, type: 3}
+    - rid: 7558958210981823385
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3584988429655258479
+          m_Value1: 4149116500911170129
+        Name: PickupTruckBlue
+        m_Value: {fileID: 5794000889603234740, guid: 5317647428c614616808eaf98d9b05b5, type: 3}
+    - rid: 7558958213854134604
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 4490945436092922882
+          m_Value1: 8131508333917022001
+        Name: VehicleEndPoint
+        m_Value: {fileID: 0}

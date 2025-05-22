@@ -47,9 +47,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc36e24d8094746e9afd69896b9f05aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tomatoList: []
-  Check: {fileID: 3993349062411451442, guid: 267d58a98b73c4dd48ab6626a37ac776, type: 3}
-  Sun: {fileID: 3370242585427636236, guid: 3d23017b88dcb4ee289a0d7bb3b9bfc8, type: 3}
+  tomatoList:
+  - {fileID: 3405020315932041126, guid: a7e3611ced9ea44e2926c3f8b81bb70c, type: 3}
+  - {fileID: 2331242246440956904, guid: 968cc08b2ee3e48e48c51a7e38cfc6a7, type: 3}
+  - {fileID: 3587952367458069894, guid: 50caf06e2c5f64f7f874f9e2cdcc7bae, type: 3}
+  - {fileID: 7602706729405631181, guid: ae82f38885f8940a595508e4d2bc0f27, type: 3}
+  - {fileID: 2792832150223904392, guid: eab3cf83243744e6086eb81cff264d3c, type: 3}
+  - {fileID: 4184692941909210187, guid: f5ff348650abe45a58ffbf0f1d0d80b1, type: 3}
+  Check: {fileID: 7387613034390875773}
+  Sun: {fileID: 7841670737236342988}
   isWatering: 0
   isPicked: 0
   isSeeding: 0
