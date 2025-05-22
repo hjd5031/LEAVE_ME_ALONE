@@ -6,7 +6,7 @@ public class EnemyCtrl : MonoBehaviour
     public GameObject sprayer; // 손에 붙은 분무통 오브젝트
     public GameObject basket;  // 손에 붙은 바구니 오브젝트
 
-    public BehaviorGraph graph;
+    // public BehaviorGraph graph;
     public bool isWatering = false;
     public bool isPicked = false;
 

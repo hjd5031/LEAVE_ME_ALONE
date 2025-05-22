@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TomatoCtrl : MonoBehaviour
+public class EnemyTomatoCtrl : MonoBehaviour
 {
     public List<GameObject> tomatoList;
 
