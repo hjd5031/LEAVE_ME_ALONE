@@ -16,6 +16,7 @@ TagManager:
   - PlayerTomato
   - Car
   - VSP
+  - Enemy
   layers:
   - Default
   - TransparentFX

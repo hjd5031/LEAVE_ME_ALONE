@@ -11,7 +11,7 @@ public partial class IsPickedAction : Action
     [SerializeReference] public BlackboardVariable<GameObject> Target;
     [SerializeReference] public BlackboardVariable<bool> Value;
 
-    private TomatoCtrl _tomato;
+    private EnemyTomatoCtrl _enemyTomato;
 
     protected override Status OnStart()
     {
@@ -23,15 +23,15 @@ public partial class IsPickedAction : Action
             return Status.Failure;
         }
 
-        _tomato = targetObj.GetComponent<TomatoCtrl>();
+        _enemyTomato = targetObj.GetComponent<EnemyTomatoCtrl>();
 
-        if (_tomato == null)
+        if (_enemyTomato == null)
         {
             Debug.LogError($"❌ Target 오브젝트 '{targetObj.name}'에 TomatoCtrl이 없습니다.");
             return Status.Failure;
         }
 
-        _tomato.isPicked = Value;
+        _enemyTomato.isPicked = Value;
 
         Debug.Log($"✅ Target '{targetObj.name}'의 isPicking 값을 {Value}로 설정했습니다.");
         return Status.Success;

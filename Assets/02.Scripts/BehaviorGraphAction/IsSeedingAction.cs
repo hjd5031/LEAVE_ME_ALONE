@@ -11,7 +11,7 @@ public partial class IsSeedingAction : Action
     [SerializeReference] public BlackboardVariable<GameObject> Target;
     [SerializeReference] public BlackboardVariable<bool> Value;
 
-    private TomatoCtrl _tomato;
+    private EnemyTomatoCtrl _enemyTomato;
 
     protected override Status OnStart()
     {
@@ -23,17 +23,17 @@ public partial class IsSeedingAction : Action
             return Status.Failure;
         }
 
-        _tomato = targetObj.GetComponent<TomatoCtrl>();
+        _enemyTomato = targetObj.GetComponent<EnemyTomatoCtrl>();
 
-        if (_tomato == null)
+        if (_enemyTomato == null)
         {
             Debug.LogError($"❌ Target 오브젝트 '{targetObj.name}'에 TomatoCtrl이 없습니다.");
             return Status.Failure;
         }
 
-        _tomato.isSeeding = Value;
+        _enemyTomato.isSeeding = Value;
 
-        Debug.Log($"✅ Target '{targetObj.name}'의 isSeeding 값을 {_tomato.isSeeding}로 설정했습니다.");
+        Debug.Log($"✅ Target '{targetObj.name}'의 isSeeding 값을 {_enemyTomato.isSeeding}로 설정했습니다.");
         return Status.Success;
     }
 }
