@@ -13,6 +13,9 @@ TagManager:
   - PickedEnemyTomato
   - EnemyisPlantable
   - PlayerisPlantable
+  - PlayerTomato
+  - Car
+  - VSP
   layers:
   - Default
   - TransparentFX
