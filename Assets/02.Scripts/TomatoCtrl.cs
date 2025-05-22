@@ -6,14 +6,20 @@ public class TomatoCtrl : MonoBehaviour
     public List<GameObject> tomatoList;
 
     private int _growthLevel;
+    
     private GameObject _currentTomato;
-
+    public GameObject Check;
+    public GameObject Sun;
+    
     public bool isWatering = false;
     public bool isPicked = false;
     public bool isSeeding = false;
     private float growTimer = 0f;
     private float growDelay = 2f; // 물을 줄 때마다 3초마다 성장
 
+
+    private bool isGettingSun = false;
+    private bool isRipen = false;
     void Start()
     {
         gameObject.tag = "EnemyisPlantable";//처음에는 빈땅 상태 아무것도 심지 않음
@@ -21,6 +27,8 @@ public class TomatoCtrl : MonoBehaviour
 
     void Update()
     {
+        if (Sun != null) Sun.SetActive(isGettingSun);
+        if (Check != null) Check.SetActive(isRipen);
         if (isSeeding && (CompareTag("EnemyisPlantable") || CompareTag("PickedEnemyTomato")))
         {
             InitializeTomatoStatus();
@@ -36,7 +44,12 @@ public class TomatoCtrl : MonoBehaviour
                 Grow();
                 growTimer = 0f;
             }
-            if (_growthLevel == 4)Invoke("TomatoRipenSun", 5f);
+
+            if (_growthLevel == 4)
+            {
+                isGettingSun = true;
+                Invoke("TomatoRipenSun", 10f);
+            }
 
         }
         else//플레이어가 수확하고 열매 없는 프리팹으로 전환
@@ -45,7 +58,8 @@ public class TomatoCtrl : MonoBehaviour
             {
                 Destroy(_currentTomato);
             }
-
+            isGettingSun = false;
+            isRipen = false;
             gameObject.tag = "PickedEnemyTomato";
             SpawnNextTomato(5);
         }
@@ -64,6 +78,8 @@ public class TomatoCtrl : MonoBehaviour
         isPicked = false;
         isWatering = false;
         isSeeding = false;
+        isGettingSun = false;
+        isRipen = false;
         // SpawnNextTomato(0);
 
         Debug.Log("TomatoStatus Initialized");
@@ -78,7 +94,7 @@ public class TomatoCtrl : MonoBehaviour
     {
         if (_growthLevel + 1 >= 5)
         {
-            Invoke("TomatoRipenSun", 5f);
+            Invoke("TomatoRipenSun", 10f);
             return;
         }
         _growthLevel++;
@@ -99,11 +115,23 @@ public class TomatoCtrl : MonoBehaviour
 
     void TomatoRipenSun()
     {
+        isGettingSun = false;
+        isRipen = true;
         gameObject.tag = "RipeEnemyTomato";
     }
     void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, 0.3f);
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Car"))
+        {
+            isGettingSun = false;
+            isRipen = false;
+           Destroy(_currentTomato);
+           gameObject.tag = "EnemyisPlantable";
+        }
     }
 }
