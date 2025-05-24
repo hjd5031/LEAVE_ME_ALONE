@@ -17,6 +17,8 @@ TagManager:
   - Car
   - VSP
   - Enemy
+  - VEP
+  - EnemyisSunning
   layers:
   - Default
   - TransparentFX
@@ -24,8 +26,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - Tomato
   - 
   - 
   - 

@@ -18,10 +18,11 @@ public class EnemyTomatoCtrl : MonoBehaviour
     private float growDelay = 2f; // 물을 줄 때마다 3초마다 성장
 
 
-    private bool isGettingSun = false;
-    private bool isRipen = false;
+    [SerializeField]private bool isGettingSun = false;
+    [SerializeField]private bool isRipen = false;
     void Start()
     {
+        // SpawnNextTomato(5);
         gameObject.tag = "EnemyisPlantable";//처음에는 빈땅 상태 아무것도 심지 않음
     }
 
@@ -48,6 +49,7 @@ public class EnemyTomatoCtrl : MonoBehaviour
             if (_growthLevel == 4)
             {
                 isGettingSun = true;
+                gameObject.tag = "EnemyisSunning";
                 Invoke("TomatoRipenSun", 10f);
             }
 
@@ -128,10 +130,21 @@ public class EnemyTomatoCtrl : MonoBehaviour
     {
         if (other.CompareTag("Car"))
         {
-            isGettingSun = false;
-            isRipen = false;
-           Destroy(_currentTomato);
-           gameObject.tag = "EnemyisPlantable";
+            if (gameObject.tag == "UnripeEnemyTomato")
+            {
+                SpawnNextTomato(0);
+                _growthLevel = 0;
+            }
+            else
+            {
+                isGettingSun = false;
+                isRipen = false;
+                isPicked = false;
+                _growthLevel = 0;
+                CancelInvoke(nameof(TomatoRipenSun));
+                Destroy(_currentTomato);
+                gameObject.tag = "EnemyisPlantable";
+            }
         }
     }
 }

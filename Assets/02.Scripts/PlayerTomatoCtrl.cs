@@ -74,16 +74,16 @@ public class PlayerTomatoCtrl : MonoBehaviour
         {
             Destroy(_currentTomato);
         }
-        gameObject.tag = "UnripePlayeromato";
+        gameObject.tag = "UnripePlayerTomato";
         isPicked = false;
         isWatering = false;
         isSeeding = false;
         isGettingSun = false;
         isRipen = false;
-        // SpawnNextTomato(0);
+        SpawnNextTomato(0);
 
         Debug.Log("TomatoStatus Initialized");
-        Invoke("CallInitailizeTomatoPrefab",4f);
+        // Invoke("CallInitailizeTomatoPrefab",4f);
     }
 
     void CallInitailizeTomatoPrefab()
