@@ -29,8 +29,9 @@ public partial class PickingEnemyTomatoAction : Action
         if (m_Timer <= 0.0f)
         {
             ChangeTomatoIntoIsPicked();
-            return Status.Success;
+            
         }
+        if(tomato.tag == "PickedEnemyTomato")return Status.Success;
         if(tomato.tag == "EnemyisPlantable")return Status.Success;
         return Status.Running;
         
@@ -38,7 +39,7 @@ public partial class PickingEnemyTomatoAction : Action
 
     void ChangeTomatoIntoIsPicked()
     {
-        tomato.tag = "EnemyisPicked";
+        tomato.tag = "PickedEnemyTomato";
         _enemyTomato.isPicked = true;
     }
     protected override void OnEnd()

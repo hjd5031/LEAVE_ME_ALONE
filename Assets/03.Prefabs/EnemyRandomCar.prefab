@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7867292821991508710}
   - component: {fileID: 8230675870570266584}
   m_Layer: 0
-  m_Name: RandomCar
+  m_Name: EnemyRandomCar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,6 +54,7 @@ MonoBehaviour:
   - rid: 7558958210981823384
   - rid: 7558958210981823385
   - rid: 7558958213854134604
+  - rid: 7558958295160455525
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
@@ -121,5 +122,13 @@ MonoBehaviour:
         GUID:
           m_Value0: 4490945436092922882
           m_Value1: 8131508333917022001
-        Name: VehicleEndPoint
-        m_Value: {fileID: 0}
+        Name: VehicleEndPoints
+        m_Value: {fileID: 8058652865342743680, guid: fab26786a18304d88b258e380ab1df37, type: 3}
+    - rid: 7558958295160455525
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 11619729343223652983
+          m_Value1: 7678088248053277396
+        Name: VehicleStartPoints
+        m_Value: {fileID: 3017013545895384794, guid: 78de1628664b8428e912560fa4833547, type: 3}

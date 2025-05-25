@@ -60,10 +60,10 @@ public class EnemyTomatoCtrl : MonoBehaviour
             {
                 Destroy(_currentTomato);
             }
+            SpawnNextTomato(5);
             isGettingSun = false;
             isRipen = false;
             gameObject.tag = "PickedEnemyTomato";
-            SpawnNextTomato(5);
         }
         
         

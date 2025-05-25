@@ -95,6 +95,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dirt_Pile
       objectReference: {fileID: 0}
+    - target: {fileID: 1000010903160450, guid: 8dfbe94bc89610d489620aca436a33ae, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4000011495609478, guid: 8dfbe94bc89610d489620aca436a33ae, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -182,7 +186,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2706189945931737782, guid: 3d23017b88dcb4ee289a0d7bb3b9bfc8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.084
+      value: 2.4150002
       objectReference: {fileID: 0}
     - target: {fileID: 2706189945931737782, guid: 3d23017b88dcb4ee289a0d7bb3b9bfc8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -279,7 +283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4332719560644634248, guid: 267d58a98b73c4dd48ab6626a37ac776, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.079
+      value: 2.41
       objectReference: {fileID: 0}
     - target: {fileID: 4332719560644634248, guid: 267d58a98b73c4dd48ab6626a37ac776, type: 3}
       propertyPath: m_LocalPosition.z
