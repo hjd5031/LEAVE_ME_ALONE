@@ -2,16 +2,24 @@ using UnityEngine;
 
 public class TireRotation : MonoBehaviour
 {
-    public float speed = 1;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public float speed = 2f;
+    private float timer = 0f;
+    private bool canRotate = false;
 
-    // Update is called once per frame
     void Update()
     {
-        transform.Rotate(speed, 0, 0);
+        if (!canRotate)
+        {
+            timer += Time.deltaTime;
+            if (timer >= 5f)
+            {
+                canRotate = true;
+            }
+        }
+
+        if (canRotate)
+        {
+            transform.Rotate(speed, 0f, 0f);
+        }
     }
 }
