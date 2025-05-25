@@ -11,7 +11,7 @@ public partial class IsPickedAction : Action
     [SerializeReference] public BlackboardVariable<GameObject> Target;
     [SerializeReference] public BlackboardVariable<bool> Value;
 
-    private EnemyTomatoCtrl _enemyTomato;
+    private EnemyTomatoCtrl _enemyTomato;   
 
     protected override Status OnStart()
     {

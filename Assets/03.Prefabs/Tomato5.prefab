@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 8946849429316930084}
   - component: {fileID: 7380169733258098795}
   - component: {fileID: 8370072340735711865}
-  m_Layer: 0
+  - component: {fileID: -9173016565208290625}
+  m_Layer: 8
   m_Name: Tomato5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +106,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
@@ -133,3 +134,18 @@ CapsuleCollider:
   m_Height: 1.8822759
   m_Direction: 1
   m_Center: {x: 0, y: 0.84, z: 0}
+--- !u!114 &-9173016565208290625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2792832150223904392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 0.3160377, b: 0.3160377, a: 1}
+  m_EffectDistance: {x: 3.46, y: 5.77}
+  m_UseGraphicAlpha: 1

@@ -14,6 +14,7 @@ public class PlayerTomatoCtrl : MonoBehaviour
     public bool isWatering = false;
     public bool isPicked = false;
     public bool isSeeding = false;
+    // public bool isClicking = false;
     private float growTimer = 0f;
     private float growDelay = 2f; // 물을 줄 때마다 3초마다 성장
 
@@ -48,6 +49,7 @@ public class PlayerTomatoCtrl : MonoBehaviour
             if (_growthLevel == 4)
             {
                 isGettingSun = true;
+                gameObject.tag = "PlayerisSunning";
                 Invoke("TomatoRipenSun", 10f);
             }
 
@@ -58,32 +60,30 @@ public class PlayerTomatoCtrl : MonoBehaviour
             {
                 Destroy(_currentTomato);
             }
+            SpawnNextTomato(5);
             isGettingSun = false;
             isRipen = false;
             gameObject.tag = "PickedPlayerTomato";
-            SpawnNextTomato(5);
         }
-        
-        
     }
 
-    void InitializeTomatoStatus()
+    void InitializeTomatoStatus()//플레이어에서 4초 눌러야 isSeeding 전환
     {
         _growthLevel = 0;
         if (_currentTomato != null)
         {
             Destroy(_currentTomato);
         }
-        gameObject.tag = "UnripePlayeromato";
+        gameObject.tag = "UnripePlayerTomato";
         isPicked = false;
         isWatering = false;
         isSeeding = false;
         isGettingSun = false;
         isRipen = false;
-        // SpawnNextTomato(0);
+        SpawnNextTomato(0);
 
         Debug.Log("TomatoStatus Initialized");
-        Invoke("CallInitailizeTomatoPrefab",4f);
+        // Invoke("CallInitailizeTomatoPrefab",4f);
     }
 
     void CallInitailizeTomatoPrefab()
@@ -128,10 +128,22 @@ public class PlayerTomatoCtrl : MonoBehaviour
     {
         if (other.CompareTag("Car"))
         {
-            isGettingSun = false;
-            isRipen = false;
-           Destroy(_currentTomato);
-           gameObject.tag = "PlayerisPlantable";
+            
+            if (gameObject.tag == "UnripePlayerTomato")
+            {
+                SpawnNextTomato(0);
+                _growthLevel = 0;
+            }
+            else
+            {
+                isGettingSun = false;
+                isRipen = false;
+                isPicked = false;
+                _growthLevel = 0;
+                CancelInvoke(nameof(TomatoRipenSun));
+                Destroy(_currentTomato);
+                gameObject.tag = "PlayerisPlantable";
+            }
         }
     }
 }

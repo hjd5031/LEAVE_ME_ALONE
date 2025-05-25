@@ -40,6 +40,7 @@ public class HoverEffectSun : MonoBehaviour
             if (direction != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
+                // targetRotation *= Quaternion.Euler(0f, 180f, 0f);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSmoothSpeed * Time.deltaTime);
             }
         }
