@@ -16,7 +16,7 @@ MonoBehaviour:
   - From: FP Camera
     To: TP Camera
     Blend:
-      Style: 0
+      Style: 1
       Time: 1
       CustomCurve:
         serializedVersion: 2
@@ -45,7 +45,7 @@ MonoBehaviour:
   - From: TP Camera
     To: FP Camera
     Blend:
-      Style: 0
+      Style: 1
       Time: 1
       CustomCurve:
         serializedVersion: 2
