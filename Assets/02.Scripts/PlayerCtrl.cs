@@ -51,15 +51,29 @@ public class PlayerCtrl : MonoBehaviour
         if (!(Input.GetMouseButton(0) && currentTarget != null))
         {
             HandleMovementInput();
+            HandleLook();
             // PlayerMove();
         }
-        HandleLook();
-        // else
-        // {
-        //     // 🎯 입력을 막는 상황에서 플레이어 회전값 고정
-        //     yRotation = transform.eulerAngles.y;
-        //     xRotation = PlayerHead != null ? PlayerHead.localEulerAngles.x : xRotation;
-        // }
+        else
+        {
+            // 🎯 입력을 막는 상황에서 currentTarget 바라보기
+            if (currentTarget != null)
+            {
+                Vector3 directionToTarget = currentTarget.transform.position - transform.position;
+                directionToTarget.y = 0f; // 수평 방향만 고려
+
+                if (directionToTarget != Vector3.zero)
+                {
+                    Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // 부드럽게 회전
+                    yRotation = transform.eulerAngles.y; // yRotation 갱신해두기 (다음 프레임을 위해)
+                }
+            }
+
+            // xRotation = 0f;
+            // xRotation = Mathf.Clamp(xRotation, -30f, 60f);
+        }
+        Debug.Log("현재 회전값 (Y): " + transform.eulerAngles.y);
 
         HandleRaycast();
         // HandleFocusInteraction();
@@ -74,27 +88,32 @@ public class PlayerCtrl : MonoBehaviour
 
     void HandleLook()
     {
-        if (!(Input.GetMouseButton(0) && currentTarget != null))
-        {
+        // if (!(Input.GetMouseButton(0) && currentTarget != null))
+        // {
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
 
             yRotation += mouseX * mouseSensitivity;
-            transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
-
             xRotation -= mouseY * mouseSensitivity;
             xRotation = Mathf.Clamp(xRotation, -30f, 60f);
+            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
 
-            if (PlayerHead != null)
-            {
-                Quaternion targetRotation = (anim != null && anim.GetBool("isPlanting"))
-                    ? Quaternion.Euler(50f, 0f, 0f)
-                    : Quaternion.Euler(xRotation, 0f, 0f);
 
-                PlayerHead.localRotation =
-                    Quaternion.Lerp(PlayerHead.localRotation, targetRotation, Time.deltaTime * 5f);
-            }
-        }
+            // if (PlayerHead != null&&!(Input.GetMouseButton(0) && currentTarget != null))
+            // {
+            //     Quaternion targetRotation = (anim != null && anim.GetBool("isPlanting"))
+            //         ? Quaternion.Euler(50f, 0f, 0f)
+            //         : Quaternion.Euler(xRotation, 0f, 0f);
+            //
+            //     PlayerHead.localRotation =
+            //         Quaternion.Lerp(PlayerHead.localRotation, targetRotation, Time.deltaTime * 5f);
+            // }
+        // }
+        // else
+        // {
+        //     yRotation = 0f;
+        //     xRotation = 0f;
+        // }
     }
 
     void HandleMovementInput()
