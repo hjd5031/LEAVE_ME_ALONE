@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_GraphOwnerName: Self
-  m_AutoSaveLastSaveLocation: 1
-  m_SaveFolder: 02.Scripts
-  m_UseSeparateSaveFolders: 0
-  m_SaveFolderAction: 
-  m_SaveFolderModifier: 
-  m_SaveFolderFlow: 
-  m_SaveFolderCondition: 
-  m_SaveFolderEventChannels: 
-  m_SaveFolderEnum: 
+  m_AutoSaveLastSaveLocation: 0
+  m_SaveFolder: Assets/02.Scripts
+  m_UseSeparateSaveFolders: 1
+  m_SaveFolderAction: 02.1BehaviorScripts/Action
+  m_SaveFolderModifier: 02.1BehaviorScripts
+  m_SaveFolderFlow: 02.1BehaviorScripts
+  m_SaveFolderCondition: 02.1BehaviorScripts/Condition
+  m_SaveFolderEventChannels: 02.1BehaviorScripts
+  m_SaveFolderEnum: 02.1BehaviorScripts
   m_AutoOpenNodeScriptsInExternalEditor: 1
   m_Namespace: 

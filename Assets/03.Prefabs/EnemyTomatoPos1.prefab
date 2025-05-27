@@ -59,6 +59,10 @@ MonoBehaviour:
   isWatering: 0
   isPicked: 0
   isSeeding: 0
+  EnemyUsing: 0
+  PlayerUsing: 0
+  isGettingSun: 0
+  isRipen: 0
 --- !u!136 &6337792533540508054
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -78,10 +82,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.03
-  m_Height: 1.47
+  m_Radius: 0.19
+  m_Height: 1.5
   m_Direction: 1
-  m_Center: {x: 0, y: 0.19, z: 0}
+  m_Center: {x: 0, y: -0.6, z: 0}
 --- !u!1001 &4762191823596865728
 PrefabInstance:
   m_ObjectHideFlags: 0
