@@ -8,6 +8,7 @@ public class CrosshairSpawner : MonoBehaviour
     {
         // 1. Canvas 생성
         GameObject canvasGO = new GameObject("CrosshairCanvas");
+        canvasGO.tag = "crossHair";
         canvasGO.layer = LayerMask.NameToLayer("UI");
         Canvas canvas = canvasGO.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;

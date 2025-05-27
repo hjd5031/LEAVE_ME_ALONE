@@ -5,8 +5,7 @@
 .utmp/
 # Unity generated folders
 /[Ll]ibrary/
-!/Library/PackageCache/
-!/Library/PackageCache/com.unity.behavior@fe41d2b9d6fa/
+
 /[Tt]emp/
 /[Oo]bj/
 /[Bb]uild/

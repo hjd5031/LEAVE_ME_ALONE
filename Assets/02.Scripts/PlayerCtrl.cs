@@ -1,22 +1,20 @@
 using System.Collections;
 using UnityEngine;
 using cakeslice;
+using Unity.Cinemachine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerCtrl : MonoBehaviour
 {
-    public GameObject sprayer; // 손에 붙은 분무통 오브젝트
-    public GameObject basket;  // 손에 붙은 바구니 오브젝트
-    
-    
+    public CinemachineCamera FPCamera;
+    public GameObject sprayer;
+    public GameObject basket;
     public float walkSpeed = 3f;
     public float runSpeed = 7f;
     public float mouseSensitivity = 3f;
-    public Transform PlayerHead;
     public Transform cameraTransform;
-    public Transform pointerTargetEmpty;
     public GameObject[] cineCameraList;
-    
+
     private Rigidbody rb;
     private Animator anim;
     private Vector3 inputDirection;
@@ -26,18 +24,19 @@ public class PlayerCtrl : MonoBehaviour
 
     public GameObject currentTarget = null;
     private GameObject lastOutlinedTarget = null;
-    private GameObject focusTarget = null;//현재 ray가 보고 있는 target
 
-    private float holdTimer = 0f;
-    private float seedDuration = 4f;
-    public bool isPlanting = false;
-    public bool hasPlanted = false;
-    private bool isClicking = false;
+    private Coroutine wateringCoroutine = null;
+
+    private float lockedYRotation = 0f;
+    private bool isRotatingLocked = false;
+
+    private bool isSeedScheduled = false;
+    private bool isPickScheduled = false;
 
     void Start()
     {
+        ResetCamera();
         cineCameraList[0].SetActive(true);
-        cineCameraList[1].SetActive(false);
         sprayer.SetActive(false);
         basket.SetActive(false);
         rb = GetComponent<Rigidbody>();
@@ -49,71 +48,52 @@ public class PlayerCtrl : MonoBehaviour
     void Update()
     {
         if (!(Input.GetMouseButton(0) && currentTarget != null))
-        {
             HandleMovementInput();
-            HandleLook();
-            // PlayerMove();
-        }
-        else
-        {
-            // 🎯 입력을 막는 상황에서 currentTarget 바라보기
-            if (currentTarget != null)
-            {
-                Vector3 directionToTarget = currentTarget.transform.position - transform.position;
-                directionToTarget.y = 0f; // 수평 방향만 고려
 
-                if (directionToTarget != Vector3.zero)
-                {
-                    Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
-                    transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // 부드럽게 회전
-                    yRotation = transform.eulerAngles.y; // yRotation 갱신해두기 (다음 프레임을 위해)
-                }
-            }
-
-            // xRotation = 0f;
-            // xRotation = Mathf.Clamp(xRotation, -30f, 60f);
-        }
-        Debug.Log("현재 회전값 (Y): " + transform.eulerAngles.y);
-
+        HandleLook();
         HandleRaycast();
-        // HandleFocusInteraction();
         ChangeTomatoStatus();
     }
+
     void FixedUpdate()
     {
         float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+
+        // cineCameraList[0].SetActive(!Input.GetKey(KeyCode.LeftShift));
+        // // cineCameraList[1].SetActive(false);
+        // cineCameraList[2].SetActive(Input.GetKey(KeyCode.LeftShift));
+
         moveDirection = inputDirection * speed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + transform.TransformDirection(moveDirection));
     }
 
     void HandleLook()
     {
-        // if (!(Input.GetMouseButton(0) && currentTarget != null))
-        // {
-            float mouseX = Input.GetAxis("Mouse X");
-            float mouseY = Input.GetAxis("Mouse Y");
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+
+        xRotation -= mouseY * mouseSensitivity;
+        xRotation = Mathf.Clamp(xRotation, -30f, 80f);
+
+        if (Input.GetMouseButton(0) && currentTarget != null)
+        {
+            if (!isRotatingLocked)
+            {
+                lockedYRotation = yRotation;
+                isRotatingLocked = true;
+            }
 
             yRotation += mouseX * mouseSensitivity;
-            xRotation -= mouseY * mouseSensitivity;
-            xRotation = Mathf.Clamp(xRotation, -30f, 60f);
-            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
+            yRotation = Mathf.Clamp(yRotation, lockedYRotation - 5f, lockedYRotation + 5f);
+        }
+        else
+        {
+            yRotation += mouseX * mouseSensitivity;
+            isRotatingLocked = false;
+            transform.rotation = Quaternion.Euler(0, yRotation, 0f);
+        }
 
-
-            // if (PlayerHead != null&&!(Input.GetMouseButton(0) && currentTarget != null))
-            // {
-            //     Quaternion targetRotation = (anim != null && anim.GetBool("isPlanting"))
-            //         ? Quaternion.Euler(50f, 0f, 0f)
-            //         : Quaternion.Euler(xRotation, 0f, 0f);
-            //
-            //     PlayerHead.localRotation =
-            //         Quaternion.Lerp(PlayerHead.localRotation, targetRotation, Time.deltaTime * 5f);
-            // }
-        // }
-        // else
-        // {
-        //     yRotation = 0f;
-        //     xRotation = 0f;
-        // }
+        cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
     }
 
     void HandleMovementInput()
@@ -133,238 +113,323 @@ public class PlayerCtrl : MonoBehaviour
     void HandleRaycast()
     {
         if (Input.GetMouseButton(0) && currentTarget != null) return;
-        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
-        // 🍅 "Tomato"와 "TomatoPrefab" 레이어를 포함한 마스크 생성
+        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
         int tomatoLayer = LayerMask.NameToLayer("Tomato");
         int prefabLayer = LayerMask.NameToLayer("TomatoPrefab");
-        int mask = (1 << tomatoLayer) | (1 << prefabLayer);  // OR 연산으로 결합
+        int mask = (1 << tomatoLayer) | (1 << prefabLayer);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 5f, mask))
+        if (Physics.Raycast(ray, out RaycastHit hit, 2f, mask))
         {
             GameObject hitObj = hit.collider.gameObject;
-            Debug.Log("🎯 Ray Hit: " + hitObj.name);
 
-            // ✅ Outline 처리 (생략 없이 기존 코드 유지)
             if (hitObj != lastOutlinedTarget)
             {
-                if (lastOutlinedTarget != null)
-                {
-                    var oldOutline = lastOutlinedTarget.GetComponent<cakeslice.Outline>();
-                    if (oldOutline != null)
-                        oldOutline.enabled = false;
-                }
+                if (lastOutlinedTarget?.GetComponent<Outline>() is { } oldOutline)
+                    oldOutline.enabled = false;
 
                 if (hitObj.GetComponent<MeshRenderer>() != null || hitObj.GetComponent<SkinnedMeshRenderer>() != null)
                 {
-                    var newOutline = hitObj.GetComponent<cakeslice.Outline>();
-                    if (newOutline == null)
-                        newOutline = hitObj.AddComponent<cakeslice.Outline>();
-                    if (newOutline != null)
-                        newOutline.enabled = true;
+                    var newOutline = hitObj.GetComponent<Outline>() ?? hitObj.AddComponent<Outline>();
+                    newOutline.enabled = true;
                 }
 
                 lastOutlinedTarget = hitObj;
             }
 
-            // ✅ currentTarget은 "Tomato" 레이어일 때만 저장
             if (hitObj.layer == tomatoLayer)
-            {
                 currentTarget = hitObj;
-            }
-
-            // // ✅ focusTarget 지정
-            // bool validTag = hitObj.CompareTag("PlayerisPlantable") || hitObj.CompareTag("PickedPlayerTomato");
-            // if (validTag && Input.GetMouseButtonDown(0))
-            // {
-            //     focusTarget = hitObj;
-            //     isPlanting = true;
-            //     holdTimer = 0f;
-            //     anim.SetBool("isPlanting", true);
-            // }
         }
         else
         {
-            // 🎯 감지 실패 시 Outline 제거
-            if (lastOutlinedTarget != null)
+            if (lastOutlinedTarget != null && !lastOutlinedTarget.Equals(null))
             {
                 var outline = lastOutlinedTarget.GetComponent<Outline>();
-                if (outline != null) outline.enabled = false;
-                lastOutlinedTarget = null;
+                if (outline != null)
+                    outline.enabled = false;
             }
 
+            ResetAllTomatoStatus();
+            // ResetCamera();
+
             currentTarget = null;
+            lastOutlinedTarget = null;
         }
     }
-
-    // void HandleFocusInteraction()
-    // {
-    //     if (focusTarget != null)
-    //     {
-    //         if (Input.GetMouseButton(0))
-    //         {
-    //             holdTimer += Time.deltaTime;
-    //
-    //             if (holdTimer >= seedDuration && !hasPlanted)
-    //             {
-    //                 hasPlanted = true;
-    //                 anim.SetBool("isPlanting", false);
-    //                 anim.SetBool("isWatering", true);
-    //
-    //                 var tomato = focusTarget.GetComponent<PlayerTomatoCtrl>();
-    //                 if (tomato != null)
-    //                 {
-    //                     tomato.isSeeding = true;
-    //                     tomato.isWatering = true;
-    //                     // focusTarget.tag = "UnripePlayerTomato";
-    //                 }
-    //             }
-    //         }
-    //         else
-    //         {
-    //             ResetPlantState(); // 내부에서 focusTarget 초기화
-    //         }
-    //     }
-    // }
 
     void ChangeTomatoStatus()
     {
-        if (currentTarget != null)
+        if (currentTarget == null)
         {
-            var tomatoScript = currentTarget.GetComponent<PlayerTomatoCtrl>();
-            if (Input.GetMouseButton(0))
+            ResetAllTomatoStatus();
+            ResetPlayerAnimation();
+            StopAllCoroutines();
+            isSeedScheduled = false;
+            isPickScheduled = false;
+            wateringCoroutine = null;
+            ResetCamera();
+            cineCameraList[0].SetActive(true);
+            return;
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            moveDirection = Vector3.zero;
+            inputDirection = Vector3.zero;
+            anim.SetBool("isTraceForward", false);
+           ResetCamera();
+           cineCameraList[1].SetActive(true);
+
+            string tag = currentTarget.tag;
+
+            if (currentTarget.TryGetComponent<PlayerTomatoCtrl>(out var playerTomato))
             {
-                cineCameraList[0].SetActive(false);
-                cineCameraList[1].SetActive(true);
-                // tomatoScript.isClicking = true;
-                if (currentTarget.tag == "PlayerisPlantable" || currentTarget.tag == "PickedPlayerTomato")
+                playerTomato.PlayerUsing = true;
+
+                if (tag == "PlayerisPlantable" || tag == "PickedPlayerTomato")
                 {
-                    //플레이어 심기 동작
-                    anim.SetBool("isPlanting", true);
-                    anim.SetBool("isWatering", false);
-                    anim.SetBool("isPicking", false);
-                    Invoke("ChangeIsSeed",4f);
-                    tomatoScript.isWatering = false;
-                    tomatoScript.isPicked = false;
-                    // tomatoScript.isSeeding = true;
-                    sprayer.SetActive(false);
-                    basket.SetActive(false);
+                    if (!isSeedScheduled)
+                    {
+                        ResetAllTomatoStatus();
+                        ResetPlayerAnimation();
+                        isSeedScheduled = true;
+                        anim.SetBool("isPlanting", true);
+                        // cineCameraList[0].SetActive(false);
+                        // cineCameraList[1].SetActive(true);
+                        StartCoroutine(DelaySetSeed(playerTomato));
+                    }
                 }
-
-                if (currentTarget.tag == "UnripePlayerTomato")
+                else if (tag == "UnripePlayerTomato")
                 {
-                    //플레이어 물주기 동작
-                    anim.SetBool("isPlanting", false);
-                    anim.SetBool("isWatering", true);
-                    anim.SetBool("isPicking", false);
-                    tomatoScript.isSeeding = false;
-                    tomatoScript.isWatering = true;
-                    tomatoScript.isPicked = false;
-                    sprayer.SetActive(true);
-                    basket.SetActive(false);
-                    
+                    if (wateringCoroutine == null)
+                    {
+                        // cineCameraList[0].SetActive(false);
+                        //
+                        // cineCameraList[1].SetActive(true);
 
+                        ResetPlayerAnimation();
+
+                        ResetAllTomatoStatus();
+                        wateringCoroutine = StartCoroutine(BackwardStepThenWatering(playerTomato));
+                    }
                 }
-
-                if (currentTarget.tag == "PlayerisSunning")
+                else if (tag == "PlayerisSunning")
                 {
-                    //아무것도 안하기
-                    anim.SetBool("isPlanting", false);
-                    anim.SetBool("isWatering", false);
-                    anim.SetBool("isPicking", false);
-                    tomatoScript.isSeeding = false;
-                    tomatoScript.isWatering = false;
-                    tomatoScript.isPicked = false;
-                    sprayer.SetActive(false);
-                    basket.SetActive(false);
+                    ResetCamera();
+                    cineCameraList[0].SetActive(true);
+                    ResetPlayerAnimation();
+
+                    ResetAllTomatoStatus();
+                    // ResetCamera();
                 }
-
-                if (currentTarget.tag == "RipePlayerTomato")
+                else if (tag == "RipePlayerTomato")
                 {
-                    //플레이어 따기 모션
-                    anim.SetBool("isPlanting", false);
-                    anim.SetBool("isWatering", false);
-                    anim.SetBool("isPicking", true);
-                    tomatoScript.isSeeding = false;
-                    tomatoScript.isWatering = false;
-                    Invoke("ChangeIsPicked", 7f);
-                    sprayer.SetActive(false);
-                    basket.SetActive(true);
+                    if (!isPickScheduled)
+                    {
+                        // cineCameraList[0].SetActive(false);
+                        //
+                        // cineCameraList[1].SetActive(true);
+                        ResetPlayerAnimation();
+                        ResetAllTomatoStatus();
+                        anim.SetBool("isPicking", true);
+
+                        isPickScheduled = true;
+                        StartCoroutine(DelaySetPicked(playerTomato));
+                    }
+                }
+                else
+                {
+                    ResetPlayerAnimation();
                 }
             }
-            else
+            else if (currentTarget.TryGetComponent<EnemyTomatoCtrl>(out var enemyTomato))
             {
-                cineCameraList[0].SetActive(true);
-                cineCameraList[1].SetActive(false);
-                anim.SetBool("isPlanting", false);
-                anim.SetBool("isWatering", false);
-                anim.SetBool("isPicking", false);
-                tomatoScript.isWatering = false;
-                tomatoScript.isPicked = false;
-                tomatoScript.isSeeding = false;
-                sprayer.SetActive(false);
-                basket.SetActive(false);
-                CancelInvoke("ChangeIsSeed");
-                CancelInvoke("ChangeIsPicked");
-                //모두 종료
+                if (tag == "RipeEnemyTomato")
+                {
+                    if (!isPickScheduled)
+                    {
+                        enemyTomato.PlayerUsing = true;
+                        // cineCameraList[0].SetActive(false);
+                        //
+                        // cineCameraList[1].SetActive(true);
+
+                        ResetPlayerAnimation();
+                        ResetAllTomatoStatus();
+
+                        anim.SetBool("isPicking", true);
+                        isPickScheduled = true;
+                        StartCoroutine(DelaySetPicked(enemyTomato));
+                    }
+                }
+                else
+                {
+                    ResetPlayerAnimation();
+                }
             }
         }
         else
         {
-            CancelInvoke("ChangeIsSeed");
-            CancelInvoke("ChangeIsPicked");
+            StopAllCoroutines();
+            isSeedScheduled = false;
+            isPickScheduled = false;
+            wateringCoroutine = null;
+            ResetAllTomatoStatus();
+            ResetPlayerAnimation();
+            ResetCamera();
             cineCameraList[0].SetActive(true);
-            cineCameraList[1].SetActive(false);
-            anim.SetBool("isPlanting", false);
-            anim.SetBool("isWatering", false);
-            anim.SetBool("isPicking", false);
-            // tomatoScript.isWatering = false;
-            // tomatoScript.isPicked = false;
-            // tomatoScript.isSeeding = false;
-            sprayer.SetActive(false);
-            basket.SetActive(false);
         }
     }
 
-    void ChangeIsSeed()
+    IEnumerator DelaySetSeed(PlayerTomatoCtrl tomatoScript)
     {
-        var tomatoScript = currentTarget.GetComponent<PlayerTomatoCtrl>();
-
+        yield return new WaitForSeconds(4f);
         tomatoScript.isSeeding = true;
+        isSeedScheduled = false;
     }
-    void ChangeIsPicked(PlayerTomatoCtrl ptc)
-    {
-        var tomatoScript = currentTarget.GetComponent<PlayerTomatoCtrl>();
 
+    IEnumerator DelaySetPicked(PlayerTomatoCtrl tomatoScript)
+    {
+        yield return new WaitForSeconds(4f);
         tomatoScript.isPicked = true;
+        isPickScheduled = false;
     }
-    // void ResetPlantState()
+
+    IEnumerator DelaySetPicked(EnemyTomatoCtrl tomatoScript)
+    {
+        yield return new WaitForSeconds(4f);
+        tomatoScript.isPicked = true;
+        isPickScheduled = false;
+    }
+
+    IEnumerator BackwardStepThenWatering(PlayerTomatoCtrl tomatoScript)
+    {
+        float moveDuration = 1f;
+        float rotateDuration = 0.5f;
+        float backwardDistance = 1f;
+        float moveElapsed = 0f;
+        float rotateElapsed = 0f;
+
+        Vector3 startPos = transform.position;
+        Vector3 targetPos = startPos - transform.forward * backwardDistance;
+        Quaternion startRot = transform.rotation;
+        Quaternion targetRot = Quaternion.Euler(0f, yRotation - 40f, 0f);
+
+        anim.SetBool("isTraceBackward", true);
+
+        while (moveElapsed < moveDuration)
+        {
+            transform.position = Vector3.Lerp(startPos, targetPos, moveElapsed / moveDuration);
+            moveElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPos;
+        anim.SetBool("isTraceBackward", false);
+        anim.SetBool("isWatering", true);
+        tomatoScript.isWatering = true;
+        sprayer.SetActive(true);
+
+        while (rotateElapsed < rotateDuration)
+        {
+            transform.rotation = Quaternion.Lerp(startRot, targetRot, rotateElapsed / rotateDuration);
+            rotateElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(10f);
+        wateringCoroutine = null;
+    }
+
+    // void ResetAllTomatoStatus(PlayerTomatoCtrl tomatoScript)
     // {
-    //     
-    //     if (isPlanting || hasPlanted)
-    //     {
-    //         isPlanting = false;
-    //         hasPlanted = false;
-    //         holdTimer = 0f;
+    //     anim.SetBool("isPlanting", false);
+    //     anim.SetBool("isWatering", false);
+    //     anim.SetBool("isPicking", false);
+    //     tomatoScript.isSeeding = false;
+    //     tomatoScript.isWatering = false;
+    //     tomatoScript.isPicked = false;
+    //     sprayer.SetActive(false);
+    //     basket.SetActive(false);
+    // }
     //
-    //         if (anim != null)
-    //         {
-    //             anim.SetBool("isPlanting", false);
-    //             anim.SetBool("isWatering", false);
-    //         }
-    //
-    //         if (focusTarget != null)
-    //         {
-    //             var tomato = focusTarget.GetComponent<PlayerTomatoCtrl>();
-    //             if (tomato != null)
-    //             {
-    //                 tomato.isWatering = false;
-    //             }
-    //
-    //             focusTarget = null; // ✅ 여기서만 null 처리
-    //         }
-    //     }
+    // void ResetAllTomatoStatus(EnemyTomatoCtrl tomatoScript)
+    // {
+    //     anim.SetBool("isPlanting", false);
+    //     anim.SetBool("isWatering", false);
+    //     anim.SetBool("isPicking", false);
+    //     tomatoScript.isSeeding = false;
+    //     tomatoScript.isWatering = false;
+    //     tomatoScript.isPicked = false;
+    //     sprayer.SetActive(false);
+    //     basket.SetActive(false);
     // }
 
-    
+    void ResetAllTomatoStatus()
+    {
+        if (currentTarget == null) return;
+        anim.SetBool("isTraceForward", false);
+
+        if (currentTarget.TryGetComponent<PlayerTomatoCtrl>(out var playerTomato))
+        {
+            playerTomato.isSeeding = false;
+            playerTomato.isWatering = false;
+            playerTomato.isPicked = false;
+            playerTomato.PlayerUsing = false;
+
+        }
+        else if (currentTarget.TryGetComponent<EnemyTomatoCtrl>(out var enemyTomato))
+        {
+            if (enemyTomato.EnemyUsing == false)
+            {
+                enemyTomato.isSeeding = false;
+                enemyTomato.isWatering = false;
+                enemyTomato.isPicked = false;
+                enemyTomato.PlayerUsing = false;
+            }
+        }
+        //
+        // sprayer.SetActive(false);
+        // basket.SetActive(false);
+        // sprayer.SetActive(false);
+        // basket.SetActive(false);
+    }
+
+    void ResetPlayerAnimation()
+    {
+        anim.SetBool("isPlanting", false);
+        anim.SetBool("isWatering", false);
+        anim.SetBool("isPicking", false);
+        sprayer.SetActive(false);
+        basket.SetActive(false);
+    }
+
+    void ResetCamera()
+    {
+        cineCameraList[0].SetActive(false);
+        cineCameraList[1].SetActive(false);
+        cineCameraList[2].SetActive(false);
+    }
+
+    public void TiltCameraUp()
+    {
+        StartCoroutine(LerpCameraPitch(-30f));
+    }
+
+    IEnumerator LerpCameraPitch(float targetPitch)
+    {
+        float duration = 1f;
+        float elapsed = 0f;
+        float startPitch = cameraTransform.localRotation.eulerAngles.x;
+        float endPitch = startPitch + targetPitch;
+
+        while (elapsed < duration)
+        {
+            float currentPitch = Mathf.Lerp(startPitch, endPitch, elapsed / duration);
+            cameraTransform.localRotation = Quaternion.Euler(currentPitch, 0f, 0f);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        cameraTransform.localRotation = Quaternion.Euler(endPitch, 0f, 0f);
+    }
 }

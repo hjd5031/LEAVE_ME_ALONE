@@ -17,7 +17,9 @@ public class PlayerTomatoCtrl : MonoBehaviour
     // public bool isClicking = false;
     private float growTimer = 0f;
     private float growDelay = 2f; // 물을 줄 때마다 3초마다 성장
-
+    
+    public bool EnemyUsing;
+    public bool PlayerUsing;
 
     private bool isGettingSun = false;
     private bool isRipen = false;
@@ -111,6 +113,26 @@ public class PlayerTomatoCtrl : MonoBehaviour
 
         Debug.Log("TomatoLevel: " + _growthLevel);
         _currentTomato = Instantiate(tomatoList[level], transform.position, Quaternion.identity, transform);
+
+        // 🌱 콜라이더 높이 설정
+        float height = 1.5f;
+        switch (level)
+        {
+            case 0: height = 1.5f; break;
+            case 1: 
+            case 2: height = 2.1f; break;
+            case 3: height = 2.6f; break;
+            case 4: 
+            case 5: height = 4.73f; break;
+        }
+
+        // 🟢 CapsuleCollider 기준 예시
+        CapsuleCollider col = GetComponent<CapsuleCollider>();
+        if (col != null)
+        {
+            col.height = height;
+            // col.center = new Vector3(0, height / 2f, 0); // 중심 높이 재조정
+        }
     }
 
     void TomatoRipenSun()

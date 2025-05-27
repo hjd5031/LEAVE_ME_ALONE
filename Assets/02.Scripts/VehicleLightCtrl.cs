@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -10,12 +11,16 @@ public class VehicleLightCtrl : MonoBehaviour
     public int flickerCount = 6;              // 총 깜빡임 횟수 (짝수면 false로 끝나므로 5나 7 추천)
     public GameObject introCamera;
     public GameObject followCamera;
+    private GameObject crossHair;
     void Start()
     {
+        crossHair = GameObject.FindWithTag("crossHair");
+        crossHair.SetActive(false);
         introCamera.SetActive(true);
         followCamera.SetActive(false);
         mudParticle.SetActive(false);
         StartCoroutine(FlickerSequence());
+        // Invoke(nameof(TurnOffCameras),15f);
     }
 
     IEnumerator FlickerSequence()
@@ -40,6 +45,12 @@ public class VehicleLightCtrl : MonoBehaviour
         SetEmission(true);
     }
 
+    void TurnOffCameras()
+    {
+        introCamera.SetActive(false);
+        followCamera.SetActive(false);
+        crossHair.SetActive(true);
+    }
     void SetLightsActive(bool isOn)
     {
         foreach (GameObject obj in lights)
@@ -62,5 +73,10 @@ public class VehicleLightCtrl : MonoBehaviour
                 material.DisableKeyword("_EMISSION");
             }
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Invoke(nameof(TurnOffCameras),5f);
     }
 }

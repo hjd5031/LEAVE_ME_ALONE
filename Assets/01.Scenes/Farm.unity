@@ -519,22 +519,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTomatoPos4-6
       objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
-      objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.451311
@@ -1816,22 +1800,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTomatoPos2-1
       objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
-      objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.3269997
@@ -2375,15 +2343,13 @@ GameObject:
   - component: {fileID: 265406509}
   - component: {fileID: 265406517}
   - component: {fileID: 265406515}
-  - component: {fileID: 265406514}
-  - component: {fileID: 265406516}
   m_Layer: 9
   m_Name: FP Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &265406509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2408,7 +2374,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 80.4
+    FieldOfView: 73.4
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 1000
@@ -2436,51 +2402,12 @@ Transform:
   m_GameObject: {fileID: 265406506}
   serializedVersion: 2
   m_LocalRotation: {x: -3.9544987e-10, y: 0.16246492, z: 6.5111784e-11, w: 0.98671436}
-  m_LocalPosition: {x: -9.067476, y: 1.79, z: -48.589405}
+  m_LocalPosition: {x: -9.129355, y: 1.926, z: -48.772217}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &265406514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 265406506}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbe43d662878a7c43bcd44d43c9e2094, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollideAgainst:
-    serializedVersion: 2
-    m_Bits: 0
-  IgnoreTag: 
-  TransparentLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  MinimumDistanceFromTarget: 0.3
-  AvoidObstacles:
-    Enabled: 1
-    DistanceLimit: 0
-    MinimumOcclusionTime: 0
-    CameraRadius: 0.4
-    UseFollowTarget:
-      Enabled: 0
-      YOffset: 0
-    Strategy: 0
-    MaximumEffort: 4
-    SmoothingTime: 0
-    Damping: 0.4
-    DampingWhenOccluded: 0.2
-  ShotQualityEvaluation:
-    Enabled: 0
-    OptimalDistance: 10
-    NearLimit: 5
-    FarLimit: 30
-    MaxQualityBoost: 0.2
 --- !u!114 &265406515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2494,36 +2421,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damping: 0
---- !u!114 &265406516
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 265406506}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca7de3aefa901374ba29464584a3109a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraRadius: 0.4
-  Decollision:
-    Enabled: 1
-    ObstacleLayers:
-      serializedVersion: 2
-      m_Bits: 65
-    UseFollowTarget:
-      Enabled: 0
-      YOffset: 0
-    Damping: 0.5
-    SmoothingTime: 0
-  TerrainResolution:
-    Enabled: 1
-    TerrainLayers:
-      serializedVersion: 2
-      m_Bits: 1
-    MaximumRaycast: 10
-    Damping: 0.5
 --- !u!114 &265406517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2888,7 +2785,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 297899510}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 53b1aebfb3fce4f8f961be85049039ae, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2913,7 +2810,7 @@ Rigidbody:
   m_GameObject: {fileID: 297899510}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2928,8 +2825,8 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 80
+  m_Interpolate: 1
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &297899515
 MonoBehaviour:
@@ -2943,20 +2840,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61a8383f0f62d4337b2f675f56829560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FPCamera: {fileID: 0}
   sprayer: {fileID: 1039729178}
   basket: {fileID: 1895407046}
   walkSpeed: 5
   runSpeed: 10
   mouseSensitivity: 3
-  PlayerHead: {fileID: 634255788}
   cameraTransform: {fileID: 634255788}
-  pointerTargetEmpty: {fileID: 0}
   cineCameraList:
   - {fileID: 265406506}
   - {fileID: 1541195573}
+  - {fileID: 366721646}
   currentTarget: {fileID: 0}
-  isPlanting: 0
-  hasPlanted: 0
 --- !u!1001 &299817595
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3307,6 +3202,109 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1177656779541376716, guid: 2d8c945ed39718148bb60ed85563190c, type: 3}
   m_PrefabInstance: {fileID: 1795325333}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &366721646
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 366721650}
+  - component: {fileID: 366721649}
+  - component: {fileID: 366721648}
+  - component: {fileID: 366721647}
+  m_Layer: 9
+  m_Name: Shift FP Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &366721647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366721646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4afa82ae3200b82408d605c3dbdd1e38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damping: 0
+--- !u!114 &366721648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366721646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d1163fa822e8b418a0a603ec078d5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damping: 0
+--- !u!114 &366721649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366721646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Priority:
+    Enabled: 0
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 599257781}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 80
+    OrthographicSize: 10
+    NearClipPlane: 0.1
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!4 &366721650
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366721646}
+  serializedVersion: 2
+  m_LocalRotation: {x: -3.9544987e-10, y: 0.16246492, z: 6.5111784e-11, w: 0.98671436}
+  m_LocalPosition: {x: -9.090561, y: 1.926, z: -48.657604}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &368977905 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7485619146387964101, guid: a7d1dd9522bb084498975fd966bbcb09, type: 3}
@@ -3658,22 +3656,6 @@ PrefabInstance:
     - target: {fileID: 665511870856748959, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_Name
       value: EnemyTomatoPos3-2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
       objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4337,22 +4319,6 @@ PrefabInstance:
     - target: {fileID: 665511870856748959, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_Name
       value: EnemyTomatoPos4-2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
       objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5360,6 +5326,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7d1dd9522bb084498975fd966bbcb09, type: 3}
+--- !u!1 &599257780
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 599257781}
+  m_Layer: 6
+  m_Name: ShiftPlayerCameraPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &599257781
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599257780}
+  serializedVersion: 2
+  m_LocalRotation: {x: -4.007744e-10, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0, y: 1.926, z: 0.567}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 297899512}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &600730260
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5599,22 +5596,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTomatoPos4-5
       objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
-      objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.3926325
@@ -5685,7 +5666,7 @@ Transform:
   m_GameObject: {fileID: 634255787}
   serializedVersion: 2
   m_LocalRotation: {x: -4.007744e-10, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.79, z: 0.639}
+  m_LocalPosition: {x: -0, y: 1.926, z: 0.446}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5759,22 +5740,6 @@ PrefabInstance:
     - target: {fileID: 665511870856748959, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_Name
       value: EnemyTomatoPos2-5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
       objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6535,22 +6500,6 @@ PrefabInstance:
     - target: {fileID: 665511870856748959, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_Name
       value: EnemyTomatoPos4-4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
       objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10117,22 +10066,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTomatoPos4-1
       objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
-      objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.3269997
@@ -10246,22 +10179,6 @@ PrefabInstance:
     - target: {fileID: 665511870856748959, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_Name
       value: EnemyTomatoPos3-1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
       objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11344,22 +11261,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTomatoPos3-5
       objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
-      objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.3926325
@@ -12286,8 +12187,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 5000
-  field of view: 40
+  far clip plane: 1000
+  field of view: 73.4
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -12314,7 +12215,7 @@ Transform:
   m_GameObject: {fileID: 1384897603}
   serializedVersion: 2
   m_LocalRotation: {x: -3.9544987e-10, y: 0.16246492, z: 6.5111784e-11, w: 0.98671436}
-  m_LocalPosition: {x: -11.949786, y: 1.7199999, z: -57.104828}
+  m_LocalPosition: {x: -9.129355, y: 1.926, z: -48.772217}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12366,7 +12267,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  CustomBlends: {fileID: 11400000, guid: 8037bc595788b413d9a703c8a3de823e, type: 2}
+  CustomBlends: {fileID: 11400000, guid: fb08b0df34f90418baa9ded087271c3c, type: 2}
 --- !u!114 &1384897609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13091,22 +12992,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTomatoPos3-4
       objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
-      objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.42813206
@@ -13285,22 +13170,6 @@ PrefabInstance:
     - target: {fileID: 665511870856748959, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_Name
       value: EnemyTomatoPos2-3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
       objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13879,17 +13748,15 @@ GameObject:
   m_Component:
   - component: {fileID: 1541195576}
   - component: {fileID: 1541195575}
-  - component: {fileID: 1541195582}
-  - component: {fileID: 1541195581}
-  - component: {fileID: 1541195583}
-  - component: {fileID: 1541195584}
+  - component: {fileID: 1541195578}
+  - component: {fileID: 1541195577}
   m_Layer: 9
   m_Name: TP Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1541195575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13942,64 +13809,26 @@ Transform:
   m_GameObject: {fileID: 1541195573}
   serializedVersion: 2
   m_LocalRotation: {x: -3.9544987e-10, y: 0.16246492, z: 6.5111784e-11, w: 0.98671436}
-  m_LocalPosition: {x: -11.949786, y: 1.7199999, z: -57.104828}
+  m_LocalPosition: {x: -10.876696, y: 3.216, z: -53.934513}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 32.409, y: 0, z: 0}
---- !u!20 &1541195581
-Camera:
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1541195577
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1541195573}
-  m_Enabled: 0
-  serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
-  m_GateFitMode: 2
-  m_FOVAxisMode: 0
-  m_Iso: 200
-  m_ShutterSpeed: 0.005
-  m_Aperture: 16
-  m_FocusDistance: 10
-  m_FocalLength: 50
-  m_BladeCount: 5
-  m_Curvature: {x: 2, y: 11}
-  m_BarrelClipping: 0.25
-  m_Anamorphism: 0
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
---- !u!114 &1541195582
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4afa82ae3200b82408d605c3dbdd1e38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damping: 0
+--- !u!114 &1541195578
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14011,11 +13840,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: {x: 0.1, y: 0.5, z: 0}
-  ShoulderOffset: {x: 0, y: -0.47, z: -0.53}
-  VerticalArmLength: 0.4
+  Damping: {x: 0.1, y: 0.5, z: 0.3}
+  ShoulderOffset: {x: 0, y: 0.92, z: -3.45}
+  VerticalArmLength: 0.37
   CameraSide: 0.5
-  CameraDistance: 8.46
+  CameraDistance: 2
   AvoidObstacles:
     Enabled: 0
     CollisionFilter:
@@ -14025,75 +13854,6 @@ MonoBehaviour:
     CameraRadius: 0.2
     DampingIntoCollision: 0
     DampingFromCollision: 0.5
---- !u!114 &1541195583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1541195573}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbe43d662878a7c43bcd44d43c9e2094, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollideAgainst:
-    serializedVersion: 2
-    m_Bits: 0
-  IgnoreTag: 
-  TransparentLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  MinimumDistanceFromTarget: 0.3
-  AvoidObstacles:
-    Enabled: 1
-    DistanceLimit: 0
-    MinimumOcclusionTime: 0
-    CameraRadius: 0.4
-    UseFollowTarget:
-      Enabled: 0
-      YOffset: 0
-    Strategy: 0
-    MaximumEffort: 4
-    SmoothingTime: 0
-    Damping: 0.4
-    DampingWhenOccluded: 0.2
-  ShotQualityEvaluation:
-    Enabled: 0
-    OptimalDistance: 10
-    NearLimit: 5
-    FarLimit: 30
-    MaxQualityBoost: 0.2
---- !u!114 &1541195584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1541195573}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca7de3aefa901374ba29464584a3109a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraRadius: 0.4
-  Decollision:
-    Enabled: 1
-    ObstacleLayers:
-      serializedVersion: 2
-      m_Bits: 65
-    UseFollowTarget:
-      Enabled: 0
-      YOffset: 0
-    Damping: 0.5
-    SmoothingTime: 0
-  TerrainResolution:
-    Enabled: 1
-    TerrainLayers:
-      serializedVersion: 2
-      m_Bits: 1
-    MaximumRaycast: 10
-    Damping: 0.5
 --- !u!4 &1553607535 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7485619146387964101, guid: a7d1dd9522bb084498975fd966bbcb09, type: 3}
@@ -14110,22 +13870,6 @@ PrefabInstance:
     - target: {fileID: 665511870856748959, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_Name
       value: EnemyTomatoPos2-4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
       objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14638,22 +14382,6 @@ PrefabInstance:
     - target: {fileID: 665511870856748959, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_Name
       value: EnemyTomatoPos2-2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
       objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15299,22 +15027,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTomatoPos1-5
       objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0.03
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.19
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
-      objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.3926325
@@ -15522,22 +15234,6 @@ PrefabInstance:
     - target: {fileID: 665511870856748959, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_Name
       value: EnemyTomatoPos1-4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0.03
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.19
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
       objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16052,6 +15748,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1b006273e6e6b4472be23a9525fe2aca, type: 3}
       insertIndex: -1
       addedObject: {fileID: 634255788}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1b006273e6e6b4472be23a9525fe2aca, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 599257781}
     - targetCorrespondingSourceObject: {fileID: 6502182839619065283, guid: 1b006273e6e6b4472be23a9525fe2aca, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1895407047}
@@ -16499,22 +16198,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTomatoPos3-6
       objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
-      objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.451311
@@ -16871,22 +16554,6 @@ PrefabInstance:
     - target: {fileID: 665511870856748959, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_Name
       value: EnemyTomatoPos3-3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
       objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17503,6 +17170,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6337792533540508054, guid: 628de5f74b6114881872af147ecc37fd, type: 3}
+      propertyPath: m_Center.y
+      value: -0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337792533540508054, guid: 628de5f74b6114881872af147ecc37fd, type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: 628de5f74b6114881872af147ecc37fd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.3269997
@@ -17938,22 +17613,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTomatoPos1-3
       objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0.03
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.19
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
-      objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.44769573
@@ -18384,22 +18043,6 @@ PrefabInstance:
     - target: {fileID: 665511870856748959, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_Name
       value: EnemyTomatoPos2-6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
       objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -19178,22 +18821,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTomatoPos1-6
       objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Radius
-      value: 0.03
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337792533540508054, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_Center.y
-      value: 0.19
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.80645144
-      objectReference: {fileID: 0}
     - target: {fileID: 7121385408964357909, guid: e0696b3227dca4694a19e7b4c453a27a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.451311
@@ -19800,6 +19427,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 584678293}
     m_Modifications:
+    - target: {fileID: 1558836660587886078, guid: fa773ec39db754946831479470604e2d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1558836661899392834, guid: fa773ec39db754946831479470604e2d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6210904718885312813, guid: fa773ec39db754946831479470604e2d, type: 3}
       propertyPath: m_Name
       value: Prop_WateringCan_02 (1)
@@ -20103,6 +19738,7 @@ SceneRoots:
   - {fileID: 270240550}
   - {fileID: 2040323167}
   - {fileID: 265406510}
+  - {fileID: 366721650}
   - {fileID: 1541195576}
   - {fileID: 816396137}
   - {fileID: 967956307}
