@@ -14,13 +14,16 @@ TagManager:
   - EnemyisPlantable
   - PlayerisPlantable
   - PlayerTomato
-  - Car
   - VSP
   - Enemy
   - VEP
   - EnemyisSunning
   - PlayerisSunning
   - crossHair
+  - PlayerCar
+  - EnemyCar
+  - Car
+  - CineCamera
   layers:
   - Default
   - TransparentFX
