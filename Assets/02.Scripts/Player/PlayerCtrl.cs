@@ -244,6 +244,7 @@ public class PlayerCtrl : MonoBehaviour
                         ResetAllTomatoStatus();
                         ResetPlayerAnimation();
                         isSeedScheduled = true;
+                        Debug.Log("Player is seeding tomato");
                         anim.SetBool("isPlanting", true);
                         // cineCameraList[0].SetActive(false);
                         // cineCameraList[1].SetActive(true);
@@ -336,7 +337,10 @@ public class PlayerCtrl : MonoBehaviour
     IEnumerator DelaySetSeed(PlayerTomatoCtrl tomatoScript)
     {
         yield return new WaitForSeconds(4f);
+        Debug.Log(tomatoScript);
+        Debug.Log("player set seed for player tomato");
         tomatoScript.isSeeding = true;
+        Debug.Log(tomatoScript.isSeeding);
         isSeedScheduled = false;
     }
 

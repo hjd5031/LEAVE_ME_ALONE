@@ -32,8 +32,10 @@ public class PlayerTomatoCtrl : MonoBehaviour
     {
         if (Sun != null) Sun.SetActive(isGettingSun);
         if (Check != null) Check.SetActive(isRipen);
+        if(isSeeding)Debug.Log("PlayerTomato is Seeding True");
         if (isSeeding && (CompareTag("PlayerisPlantable") || CompareTag("PickedPlayerTomato")))
         {
+            Debug.Log("Player Trying to seed Tomato Player");
             InitializeTomatoStatus();
         }
         if (!isPicked)//플레이어가 수확하고 있지 않은 상태
@@ -89,12 +91,12 @@ public class PlayerTomatoCtrl : MonoBehaviour
         gameObject.tag = "UnripePlayerTomato";
         isPicked = false;
         isWatering = false;
-        isSeeding = false;
         isGettingSun = false;
         isRipen = false;
         SpawnNextTomato(0);
 
-        Debug.Log("TomatoStatus Initialized");
+        Debug.Log("TomatoStatus Player Initialized");
+        // isSeeding = false;
         // Invoke("CallInitailizeTomatoPrefab",4f);
     }
 
