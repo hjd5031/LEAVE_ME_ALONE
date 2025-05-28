@@ -66,7 +66,7 @@ public class EnemyTomatoCtrl : MonoBehaviour
             {
                 GameObject player = GameObject.FindGameObjectWithTag("Enemy");
                 var playerScript = player.GetComponent<EnemyCtrl>();
-                Debug.Log(player);
+                // Debug.Log(player);
                 // int randint = Random.Range(1, 11);
                 int randint = 1;
                 if (randint == 1) playerScript.hasVehicleItem = true;
@@ -95,7 +95,7 @@ public class EnemyTomatoCtrl : MonoBehaviour
         isRipen = false;
         // SpawnNextTomato(0);
 
-        Debug.Log("TomatoStatus Initialized");
+        // Debug.Log("TomatoStatus Initialized");
         Invoke("CallInitailizeTomatoPrefab",4f);
     }
 

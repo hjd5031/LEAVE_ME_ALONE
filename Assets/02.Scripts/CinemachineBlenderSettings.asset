@@ -14,31 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CustomBlends:
   - From: FP Camera
-    To: Shift FP Camera
-    Blend:
-      Style: 4
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 0
-  - From: Shift FP Camera
-    To: FP Camera
-    Blend:
-      Style: 5
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 0
-  - From: FP Camera
     To: TP Camera
     Blend:
-      Style: 3
+      Style: 5
       Time: 2
       CustomCurve:
         serializedVersion: 2
