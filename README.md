@@ -1,14 +1,20 @@
-# LEAVE ME ALONE!!!
+# [LEAVE ME ALONE!!!🍎](https://play.unity.com/en/games/85d47c6f-084e-4ce4-a42c-f55f903f2ace/leave-me-alone)
 
-[LEAVE ME ALONE!!!🍎](https://play.unity.com/en/games/85d47c6f-084e-4ce4-a42c-f55f903f2ace/leave-me-alone)
 
-## 세종대학교 소프트웨어학과 게임프로그래밍 강의 Final Term Project입니다.
+### 세종대학교 소프트웨어학과 게임프로그래밍 강의 Final Term Project입니다.
 ---
 이 게임은 AI 농부와 대항해서 토마토 농사를 지어 5분 안에 누가 가장 많이 수확하는지 겨루는 게임입니다.
 AI 농부는 자기 판단에 맞게 Player가 할 수 있는 모든 것을 동일하게 할 수 있습니다.
+---
 토마토는 심기, 자라기, 익기, 다 익음, 수확 5가지 상태가 있고 자라기 과정에는 내부적으로 4개의 토마토 모양이 있습니다.
 각 단계는 2초의 간격을 두고 있고 심기와 수확은 4초가 소요됩니다. 익는 시간은 10초 입니다.
 
-**Item**
+###Items
 - Pickup Truck
-- Drones
+- Boost Drone
+- Toxic Drone
+  
+아이템은 위와 같이 3개가 존재하고 토마토를 수확하면 랜덤으로 제공합니다.
+Pickup Truck은 사용하면 상대방의 농장으로 달려가 밭을 갈아버립니다.
+Boost Drone은 자신의 농장에 버프를 줘 익는 과정을 각각 1초로 감소, 익는 시간을 5초로 감소 시킵니다.
+Toxic Drone은 상대의 밭으로 날라가 독극물을 뿌려 전멸 시킵니다.
