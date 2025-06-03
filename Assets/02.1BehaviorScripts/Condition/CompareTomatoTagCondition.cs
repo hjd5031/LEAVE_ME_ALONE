@@ -8,12 +8,21 @@ internal class CompareTomatoTagCondition : Condition
 {
     [SerializeReference] public BlackboardVariable<GameObject> Target;
     [SerializeReference] public BlackboardVariable<string> Value;
-
+    private int usableTomatoCount = 0;
+    private EnemyTomatoCtrl _enemyTomato;
     public override bool IsTrue()
     {
+        usableTomatoCount = 0;
         GameObject[] tagged = GameObject.FindGameObjectsWithTag(Value);
-        int randint = UnityEngine.Random.Range(1, 3);
-        if (tagged.Length >= randint)
+
+        foreach (GameObject go in tagged)
+        {
+            _enemyTomato = go.GetComponent<EnemyTomatoCtrl>();
+            if(!_enemyTomato.PlayerUsing)
+                usableTomatoCount++;
+        }
+        // int randint = UnityEngine.Random.Range(1, 3);
+        if (usableTomatoCount >= 1)
         {
             return true;           
         }

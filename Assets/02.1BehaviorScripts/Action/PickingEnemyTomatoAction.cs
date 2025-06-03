@@ -13,12 +13,13 @@ public partial class PickingEnemyTomatoAction : Action
     [SerializeReference] public BlackboardVariable<float> Wait_Time;
     [CreateProperty] private float m_Timer = 0.0f;
     private GameObject tomato;
-    private EnemyTomatoCtrl _enemyTomato;   
-    
+    private EnemyTomatoCtrl _enemyTomato;
+    private EnemyCtrl enemy;
     protected override Status OnStart()
     {
         m_Timer = Wait_Time;
         tomato = Target?.Value;
+        enemy = GameObject.FindFirstObjectByType<EnemyCtrl>();
         _enemyTomato = tomato.GetComponent<EnemyTomatoCtrl>();
         return Status.Running;
     }
@@ -31,7 +32,12 @@ public partial class PickingEnemyTomatoAction : Action
             ChangeTomatoIntoIsPicked();
             
         }
-        if(tomato.tag == "PickedEnemyTomato")return Status.Success;
+
+        if (tomato.tag == "PickedEnemyTomato")
+        {
+            enemy.EnemyScore += 6;
+            return Status.Success;
+        }
         if(tomato.tag == "EnemyisPlantable")return Status.Success;
         return Status.Running;
         

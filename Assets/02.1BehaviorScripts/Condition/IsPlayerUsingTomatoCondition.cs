@@ -11,9 +11,13 @@ public partial class IsPlayerUsingTomatoCondition : Condition
     public override bool IsTrue()
     {
         var tomatoScript = Playertomato.Value.GetComponent<PlayerTomatoCtrl>();
-        if(tomatoScript.PlayerUsing)
+        if (tomatoScript.PlayerUsing || !tomatoScript.CompareTag("RipePlayerTomato"))
+        {
+            SoundManager.Instance.PlaySfx(SoundManager.Sfx.EnemyFrustrated,false, 1f);
             return true;
+        }
 
+        SoundManager.Instance.PlaySfx(SoundManager.Sfx.EnemyLaugh3,false,1f);
         return false;
     }
 

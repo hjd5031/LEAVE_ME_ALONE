@@ -11,8 +11,10 @@ public partial class EnemyMoveBackwardAction : Action
 {
     [SerializeReference] public BlackboardVariable<GameObject> Target;
     private EnemyCtrl _enemy;
-
+    private MoveBackHelper helper;
     private class MoveBackHelper : MonoBehaviour {}
+
+    private Coroutine moveBachkCoroutine;
 
     protected override Status OnStart()
     {
@@ -33,18 +35,43 @@ public partial class EnemyMoveBackwardAction : Action
         }
 
         // 이동 헬퍼 추가
-        var helper = targetObj.GetComponent<MoveBackHelper>();
+        helper = targetObj.GetComponent<MoveBackHelper>();
         if (helper == null)
         {
             helper = targetObj.AddComponent<MoveBackHelper>();
         }
 
-        helper.StartCoroutine(SmoothMoveBack(targetObj.transform, 1f, 2f));
+        moveBachkCoroutine = helper.StartCoroutine(SmoothMoveBack(targetObj.transform, 0.8f, 1.8f));
 
         Debug.Log($"✅ Target '{targetObj.name}'가 부드럽게 뒤로 이동합니다.");
-        return Status.Success;
+        return Status.Running;
     }
 
+    protected override Status OnUpdate()
+    {
+        foreach(var tomatoes in GameManager.Instance.enemyTomatoes)
+        {
+            if (tomatoes.tag == "RipeEnemyTomato")
+            {
+                if (moveBachkCoroutine != null)
+                {
+                    helper.StopCoroutine(moveBachkCoroutine);
+                    moveBachkCoroutine = null;
+                }
+
+                // SoundManager.Instance.StopSfx(PlayerDigSoundID);
+                return Status.Success;
+            }
+            // else return Status.Running;
+          
+        }
+        if(moveBachkCoroutine != null)
+            return Status.Running;
+        else
+        {
+            return Status.Success;
+        }
+    }
     private IEnumerator SmoothMoveBack(Transform target, float distance, float duration)
     {
         Vector3 start = target.position;
@@ -58,5 +85,6 @@ public partial class EnemyMoveBackwardAction : Action
             yield return null;
         }
         target.position = end;
+        moveBachkCoroutine = null;
     }
 }
