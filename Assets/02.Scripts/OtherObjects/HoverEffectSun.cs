@@ -8,24 +8,34 @@ public class HoverEffectSun : MonoBehaviour
 
     private Vector3 initialPosition;
     private Transform targetTransform;
+    private GameObject player;
 
     void Start()
     {
         initialPosition = transform.position;
 
-        GameObject player = GameObject.FindWithTag("Player");
+        // "Player" 태그가 붙은 오브젝트 찾기
+        player = GameObject.FindWithTag("Player");
         if (player != null)
         {
+            // Debug.LogWarning("Player 태그를 가진 오브젝트를 찾을 수 없습니다.");
             targetTransform = player.transform;
         }
         else
         {
-            Debug.LogWarning("Player 태그를 가진 오브젝트를 찾을 수 없습니다.");
+            // Debug.LogWarning("Player 태그를 가진 오브젝트를 찾을 수 없습니다.");
         }
     }
 
     void Update()
     {
+        if (player != null)
+        {
+            // Debug.LogWarning("Player 태그를 가진 오브젝트를 찾았습니다.");
+            player = GameObject.FindWithTag("Player");
+            targetTransform = player.transform;
+
+        }
         // ⬆️ 호버링
         float offsetY = Mathf.Sin(Time.time * hoverSpeed) * hoverAmplitude;
         transform.position = initialPosition + new Vector3(0f, offsetY, 0f);

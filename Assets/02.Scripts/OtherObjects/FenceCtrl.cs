@@ -31,7 +31,7 @@ public class FenceCtrl : MonoBehaviour
             // ✅ Constraints 해제 후 폭발
             _rb.constraints = RigidbodyConstraints.None;
             _rb.AddExplosionForce(explosionForce, explosionPos, explosionRadius, upwardsModifier, ForceMode.Impulse);
-
+            SoundManager.Instance.Play3DSfx(SoundManager.Sfx.FenceBreak,transform,0.5f);
             Debug.Log("🚗 Fence hit by car → flying!");
 
             // ✅ 5초 후 재생성

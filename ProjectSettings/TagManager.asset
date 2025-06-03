@@ -24,6 +24,11 @@ TagManager:
   - EnemyCar
   - Car
   - CineCamera
+  - timer
+  - PlayerScore
+  - EnemyScore
+  - GameNameCanvas
+  - Instructions
   layers:
   - Default
   - TransparentFX
@@ -35,7 +40,7 @@ TagManager:
   - Tomato
   - TomatoPrefab
   - Camera
-  - 
+  - TransparentWall
   - 
   - 
   - 

@@ -10,22 +10,50 @@ public partial class WaterUntilTomatoRipeAction : Action
 {
     [SerializeReference] public BlackboardVariable<GameObject> Target;
     private GameObject tomato;
+    private string PlayerDigSoundID;
+    private GameObject player;
     protected override Status OnStart()
     {
         tomato = Target?.Value;
+        player = GameObject.FindGameObjectWithTag("Enemy");
+        PlayerDigSoundID = SoundManager.Instance.Play3DSfx(SoundManager.Sfx.WaterTomato, player.transform,0.6f);
+
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
-        if(tomato.tag == "EnemyisSunning")
-            return Status.Success;
-        else
+
+        if (tomato.tag == "EnemyisSunning")
         {
-            return Status.Running;
+            SoundManager.Instance.StopSfx(PlayerDigSoundID);
+            return Status.Success;
         }
+        foreach(var tomatoes in GameManager.Instance.enemyTomatoes)
+        {
+            if (tomatoes.tag == "RipeEnemyTomato")
+            {
+                SoundManager.Instance.StopSfx(PlayerDigSoundID);
+                return Status.Success;
+            }
+        }
+        // else
+        // {
+        //     return Status.Running;
+        // }
+        return Status.Running;
     }
 
+    // Status CheckPlayerTomatoCondition()
+    // {
+    //     foreach(var tomato in GameManager.Instance.enemyTomatoes)
+    //     {
+    //         if(tomato.tag == "RipeEnemyTomato")
+    //             return Status.Success;
+    //     }
+    //
+    //     return Status.Running;
+    // }
     protected override void OnEnd()
     {
     }

@@ -17,7 +17,7 @@ public class PlayerTomatoCtrl : MonoBehaviour
     // public bool isClicking = false;
     private float growTimer = 0f;
     private float growDelay = 2f; // 물을 줄 때마다 3초마다 성장//gamemanager
-    
+    private float ripeningTime = 10f;
     public bool EnemyUsing;
     public bool PlayerUsing;
 
@@ -30,12 +30,13 @@ public class PlayerTomatoCtrl : MonoBehaviour
 
     void Update()
     {
+        // Debug.Log(growDelay);
         if (Sun != null) Sun.SetActive(isGettingSun);
         if (Check != null) Check.SetActive(isRipen);
-        if(isSeeding)Debug.Log("PlayerTomato is Seeding True");
+        // if(isSeeding)Debug.Log("PlayerTomato is Seeding True");
         if (isSeeding && (CompareTag("PlayerisPlantable") || CompareTag("PickedPlayerTomato")))
         {
-            Debug.Log("Player Trying to seed Tomato Player");
+            // Debug.Log("Player Trying to seed Tomato Player");
             InitializeTomatoStatus();
         }
         if (!isPicked)//플레이어가 수확하고 있지 않은 상태
@@ -49,12 +50,12 @@ public class PlayerTomatoCtrl : MonoBehaviour
                 Grow();
                 growTimer = 0f;
             }
-
+            
             if (_growthLevel == 4)
             {
                 isGettingSun = true;
                 gameObject.tag = "PlayerisSunning";
-                Invoke("TomatoRipenSun", 10f);
+                Invoke("TomatoRipenSun", ripeningTime);
             }
 
         }
@@ -64,18 +65,28 @@ public class PlayerTomatoCtrl : MonoBehaviour
             {
                 Destroy(_currentTomato);
             }
+            _growthLevel = 5;
             SpawnNextTomato(5);
-            if (PlayerUsing)
+            if (PlayerUsing&& _growthLevel ==5 && isPicked)
             {
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                int itemRandint = Random.Range(0, 3);
+                Debug.Log("Player random itemint" + itemRandint);
+                // Debug.Log("itemgiven");
+                GameObject player = GameObject.FindWithTag("Player");
                 var playerScript = player.GetComponent<PlayerCtrl>();
-                Debug.Log(player);
-                // int randint = Random.Range(1, 11);
-                int randint = 1;
-                if (randint == 1) playerScript.hasVehicleItem = true;
+                if (itemRandint == 0 && !playerScript.hasVehicleItem)
+                {
+                    playerScript.hasVehicleItem = true;
+                }
+            
+                if (itemRandint == 2 && !playerScript.hasDroneItem)
+                {
+                    playerScript.hasDroneItem = true;
+                }
             }
             isGettingSun = false;
             isRipen = false;
+            isPicked = false;
             // if()
             gameObject.tag = "PickedPlayerTomato";
         }
@@ -95,8 +106,8 @@ public class PlayerTomatoCtrl : MonoBehaviour
         isRipen = false;
         SpawnNextTomato(0);
 
-        Debug.Log("TomatoStatus Player Initialized");
-        // isSeeding = false;
+        // Debug.Log("TomatoStatus Player Initialized");
+        isSeeding = false;
         // Invoke("CallInitailizeTomatoPrefab",4f);
     }
 
@@ -108,7 +119,7 @@ public class PlayerTomatoCtrl : MonoBehaviour
     {
         if (_growthLevel + 1 >= 5)
         {
-            Invoke("TomatoRipenSun", 10f);
+            Invoke("TomatoRipenSun", ripeningTime);
             return;
         }
         _growthLevel++;
@@ -146,15 +157,24 @@ public class PlayerTomatoCtrl : MonoBehaviour
             // col.center = new Vector3(0, height / 2f, 0); // 중심 높이 재조정
         }
         //
-        if (PlayerUsing&& _growthLevel ==5)
-        {
-            Debug.Log("itemgiven");
-            GameObject player = GameObject.FindWithTag("Player");
-            var playerScript = player.GetComponent<PlayerCtrl>();
-            // int randint = Random.Range(1, 11);
-            int randint = 1;
-            if (randint == 1) playerScript.hasVehicleItem = true;
-        }
+        //
+        // if (PlayerUsing&& _growthLevel ==5)
+        // {
+        //     int itemRandint = Random.Range(0, 3);
+        //     Debug.Log("Player random itemint : " + itemRandint);
+        //     // Debug.Log("itemgiven");
+        //     GameObject player = GameObject.FindWithTag("Player");
+        //     var playerScript = player.GetComponent<PlayerCtrl>();
+        //     if (itemRandint == 0 && !playerScript.hasVehicleItem)
+        //     {
+        //         playerScript.hasVehicleItem = true;
+        //     }
+        //
+        //     if (itemRandint == 2 && !playerScript.hasDroneItem)
+        //     {
+        //         playerScript.hasDroneItem = true;
+        //     }
+        // }
     }
 
     void TomatoRipenSun()
@@ -168,9 +188,37 @@ public class PlayerTomatoCtrl : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, 0.3f);
     }
+    public void GrowDelayDecrease()
+    {
+        Debug.Log("GrowDelayDecrease");
+        growDelay = 1f;
+        ripeningTime = 5f;
+        //todo activate boost icon
+        Invoke("GrowDelayIncrease", 60f);
+    }
+    void GrowDelayIncrease()
+    {
+        growDelay = 2f;
+        ripeningTime = 10f;
+    }
+
+    public void ToxicOnTomato()
+    {
+        isGettingSun = false;
+        isRipen = false;
+        //todo isGettingBosst = false;
+        isPicked = false;
+        growDelay = 2f;
+        _growthLevel = 0;
+        ripeningTime = 10f;
+        CancelInvoke(nameof(TomatoRipenSun));
+        if(_currentTomato!= null)
+            Destroy(_currentTomato);
+        gameObject.tag = "PlayerisPlantable";
+    }
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Car"))
+        if (other.CompareTag("EnemyCar"))
         {
             
             if (gameObject.tag == "UnripePlayerTomato")
