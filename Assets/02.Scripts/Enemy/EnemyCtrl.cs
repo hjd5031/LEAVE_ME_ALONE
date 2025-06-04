@@ -20,7 +20,7 @@ public class EnemyCtrl : MonoBehaviour
     public int EnemyScore = 0;//gamemanager
     
     
-    string debugMessage = "";
+    // string debugMessage = "";
     void Update()
     {
         GameManager.Instance.EnemyScore = EnemyScore;

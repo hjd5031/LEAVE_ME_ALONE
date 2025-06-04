@@ -108,10 +108,14 @@ public class GameManager : Singleton<GameManager>
                 // SoundManager.Instance.StopAllSfx();
                 SoundManager.Instance.PlayBGM(SoundManager.Bgm.BGM2, false);
 
-                if (PlayerScore <= EnemyScore)
+                if (PlayerScore < EnemyScore)
                     SceneManager.LoadScene("GameLoseScene");
-                else
+                else if(PlayerScore > EnemyScore)
                     SceneManager.LoadScene("GameWinScene");
+                else
+                {
+                    SceneManager.LoadScene("GameTieScene");
+                }
             }
 
             UpdateScoreText();
@@ -161,7 +165,7 @@ public class GameManager : Singleton<GameManager>
             UpdateTimeText();
             UpdateScoreText();
         }
-        else if (scene.name == "GameLoseScene" || scene.name == "GameWinScene")
+        else if (scene.name == "GameLoseScene" || scene.name == "GameWinScene" || scene.name == "GameTieScene")
         {
             SoundManager.Instance.StopAllSfx();
             SetSceneState(GameSceneState.GameEnd);
