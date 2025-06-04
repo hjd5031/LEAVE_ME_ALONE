@@ -8,25 +8,34 @@ public class HoverEffectCheck : MonoBehaviour
 
     private Vector3 initialPosition;         // 시작 위치 저장
     private Transform targetTransform;       // 바라볼 대상 (플레이어)
+    private GameObject player;
 
     void Start()
     {
         initialPosition = transform.position;
 
         // "Player" 태그가 붙은 오브젝트 찾기
-        GameObject player = GameObject.FindWithTag("Player");
+        player = GameObject.FindWithTag("Player");
         if (player != null)
         {
+            // Debug.LogWarning("Player 태그를 가진 오브젝트를 찾을 수 없습니다.");
             targetTransform = player.transform;
         }
         else
         {
-            Debug.LogWarning("Player 태그를 가진 오브젝트를 찾을 수 없습니다.");
+            // Debug.LogWarning("Player 태그를 가진 오브젝트를 찾을 수 없습니다.");
         }
     }
 
     void Update()
     {
+        if (player != null)
+        {
+            // Debug.LogWarning("Player 태그를 가진 오브젝트를 찾았습니다.");
+            player = GameObject.FindWithTag("Player");
+            targetTransform = player.transform;
+
+        }
         // ⬆️ 호버링 (y값을 사인 함수로 위아래 움직임)
         float offsetY = Mathf.Sin(Time.time * hoverSpeed) * hoverAmplitude;
         transform.position = initialPosition + new Vector3(0f, offsetY, 0f);

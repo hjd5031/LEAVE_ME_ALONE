@@ -12,10 +12,12 @@ public partial class ChangePlayerTomatoIntoIsPickedAction : Action
     [SerializeReference] public BlackboardVariable<bool> Value;
 
     private PlayerTomatoCtrl _playerTomato;
+    private EnemyCtrl enemy;
 
     protected override Status OnStart()
     {
-        GameObject targetObj = Target?.Value;
+        enemy = GameObject.FindFirstObjectByType<EnemyCtrl>();
+        GameObject targetObj = Target.Value;
 
         if (targetObj == null)
         {
@@ -31,9 +33,13 @@ public partial class ChangePlayerTomatoIntoIsPickedAction : Action
             return Status.Failure;
         }
 
-        _playerTomato.isPicked = Value;
-
-        Debug.Log($"✅ Target '{targetObj.name}'의 isPicked 값을 {Value}로 설정했습니다.");
+        if (_playerTomato.CompareTag("RipePlayerTomato"))
+        {
+            enemy.EnemyScore += 4;
+            _playerTomato.isPicked = Value;
+            Debug.Log($"✅ Target '{targetObj.name}'의 isPicked 값을 {Value}로 설정했습니다.");    
+            // return Status.Success;
+        }
         return Status.Success;
     }
 }

@@ -16,7 +16,10 @@
 # Unity WebGL builds
 /WebGL Builds/
 /*.zip
-/webgl_sharing
+/webgl_sharing/
+/WebGL Builds2/
+/WebGL Builds1/
+/Development Buillds/
 
 #exception behavior file
 !/Library/PackageCache/com.unity.behavior@fe41d2b9d6fa

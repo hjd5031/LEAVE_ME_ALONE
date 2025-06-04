@@ -1,7 +1,9 @@
 using System.Collections;
 using UnityEngine;
-using cakeslice;
 using Unity.Cinemachine;
+using UnityEngine.Rendering.UI;
+using UnityEngine.UI;
+using Outline = cakeslice.Outline;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerCtrl : MonoBehaviour
@@ -26,6 +28,9 @@ public class PlayerCtrl : MonoBehaviour
     private GameObject lastOutlinedTarget = null;
 
     private Coroutine wateringCoroutine = null;
+    private Coroutine playerDelaySetSeed = null;
+    private Coroutine playerDelaySetPicked = null;
+    private Coroutine enemyDelaySetPicked = null;
 
     private float lockedYRotation = 0f;
     private bool isRotatingLocked = false;
@@ -41,7 +46,25 @@ public class PlayerCtrl : MonoBehaviour
     
     string debugMessage = "";
     public GameObject CarItem;
+    public GameObject ToxicDroneItem;//for enemy
+    public GameObject BoostDroneItem;//for player itself
+    public Transform ToxicDroneSpawnPoint;
+    public Transform BoostDroneSpawnPoint;
     private bool isTurning;
+
+
+    private string PlayerWalkSoundID;
+    private string PlayerRunSoundID;
+    private string PlayerWaterSoundID;
+    private string PlayerDigSoundID;
+    
+    public GameObject PlayerBoostDroneItem;
+    public GameObject PlayerToxicDroneItem;
+    public GameObject PlayerVehicleItem;
+
+    public GameObject DroneBar;
+    public Slider DroneBarSlider;
+    private Coroutine droneBarCoroutine = null;
 
     void Start()
     {
@@ -49,29 +72,71 @@ public class PlayerCtrl : MonoBehaviour
         cineCameraList[0].SetActive(true);
         sprayer.SetActive(false);
         basket.SetActive(false);
+        PlayerVehicleItem.SetActive(false);
+        PlayerToxicDroneItem.SetActive(false);
+        PlayerBoostDroneItem.SetActive(false);
+        DroneBar.SetActive(false);
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         yRotation = transform.eulerAngles.y;
+        // DroneBarSlider.value = 30f;
     }
 
     void Update()
     {
         if (!(Input.GetMouseButton(0) && currentTarget != null))
             HandleMovementInput();
-
+        CheckItemUsability();
         HandleLook();
         HandleRaycast();
         ChangeTomatoStatus();
+        HandleUI();
+    }
+
+    void HandleUI()
+    {
+        GameManager.Instance.PlayerScore = PlayerScore;
         if (hasVehicleItem)
         {
-            // ResetCamera();
-            debugMessage = "has Vehicle Item";
+            PlayerVehicleItem.SetActive(true);
         }
         else
         {
-            debugMessage = "has no Vehicle Item";
+            PlayerVehicleItem.SetActive(false);
         }
+
+        if (hasDroneItem)
+        {
+            PlayerToxicDroneItem.SetActive(true);
+            PlayerBoostDroneItem.SetActive(true);
+        }
+        else
+        {
+            PlayerToxicDroneItem.SetActive(false);
+            PlayerBoostDroneItem.SetActive(false);
+        }
+        
+        // if (hasVehicleItem && hasDroneItem)
+        // {
+        //     // ResetCamera();
+        //     debugMessage = "has Vehicle Item"+"\nhas Drone Item\n" + PlayerScore;
+        // }
+        // if (!hasVehicleItem && hasDroneItem)
+        // {
+        //     // ResetCamera();
+        //     debugMessage = "no Vehicle Item"+"\nhas Drone Item\n" + PlayerScore;
+        // }
+        // if (hasVehicleItem && !hasDroneItem)
+        // {
+        //     // ResetCamera();
+        //     debugMessage = "has Vehicle Item"+"\nno Drone Item\n" + PlayerScore;
+        // }
+        // if (!hasVehicleItem && !hasDroneItem)
+        // {
+        //     // ResetCamera();
+        //     debugMessage = "no Vehicle Item"+"\nno Drone Item\n" + PlayerScore;
+        // }
     }
     private float targetFOV = 75f;
     public float fovChangeSpeed = 5f; // 속도 조절
@@ -86,7 +151,7 @@ public class PlayerCtrl : MonoBehaviour
                           Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D));
 
         // 목표 FOV 설정
-        targetFOV = isRunning ? 100f : 75f;
+        targetFOV = isRunning ? 90f : 75f;
 
         // 현재 FOV를 목표 FOV로 자연스럽게 보간
         FPCamera.Lens.FieldOfView = Mathf.Lerp(FPCamera.Lens.FieldOfView, targetFOV, Time.deltaTime * fovChangeSpeed);
@@ -131,40 +196,144 @@ public class PlayerCtrl : MonoBehaviour
         //     anim.SetBool("isTraceForward", isTurning);
         // }
     }
-
+    private bool isWalking = false;
+    private bool isRunning = false;
     void HandleMovementInput()
     {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         inputDirection = new Vector3(h, 0f, v).normalized;
 
+        bool isMoving = inputDirection.sqrMagnitude > 0.01f;
+        bool isForward = v > 0f;
+        bool isBackward = v < 0f;
+        bool isSide = h != 0f;
+        bool isShift = Input.GetKey(KeyCode.LeftShift);
+
         if (anim != null)
         {
-            bool isMoving = inputDirection.sqrMagnitude > 0.01f;
-            bool isForward = v > 0f;
-            bool isBackward = v < 0f;
-            bool isSide = h != 0f;
-
-            // ⬆️ 앞으로 걷기 + ⬅️➡️ 옆으로 걷기 전이도 포함
-            anim.SetBool("isTraceForward", (isMoving && (isForward || isSide)) ||isTurning);
+            anim.SetBool("isTraceForward", (isMoving && (isForward || isSide)) || isTurning);
             anim.SetBool("isTraceBackward", isMoving && isBackward);
-            anim.SetBool("isShift", Input.GetKey(KeyCode.LeftShift));
+            anim.SetBool("isShift", isShift);
         }
 
-        if (hasVehicleItem)
+        // ✅ 사운드 처리
+        if (isMoving)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (isShift && !isRunning)
             {
-                Instantiate(CarItem, transform.position, Quaternion.identity);
-                hasVehicleItem = false;
+                StopWalkSound();
+                PlayRunSound();
             }
+            else if (!isShift && !isWalking)
+            {
+                StopRunSound();
+                PlayWalkSound();
+            }
+        }
+        else
+        {
+            StopWalkSound();
+            StopRunSound();
         }
     }
 
+    void CheckItemUsability()
+    {
+        if (hasVehicleItem)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1)&&!GameManager.Instance.EnemyUsingItem)
+            {
+                Instantiate(CarItem, transform.position, Quaternion.identity);
+                GameManager.Instance.PLayerUsingItem = true;
+                hasVehicleItem = false;
+            }
+        }
+
+        if (hasDroneItem)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                Instantiate(BoostDroneItem, BoostDroneSpawnPoint.position, Quaternion.identity);
+                DroneBar.SetActive(true);
+                hasDroneItem = false;
+                if(droneBarCoroutine != null)
+                    StopCoroutine(droneBarCoroutine);
+                droneBarCoroutine = StartCoroutine(DroneBarCountdown(60f));
+            } 
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                Instantiate(ToxicDroneItem, ToxicDroneSpawnPoint.position, Quaternion.identity);
+                hasDroneItem = false;
+            }
+        }
+    }
+    IEnumerator DroneBarCountdown(float duration)
+    {
+        Debug.Log("Drone Bar Countdown");
+        // DroneBarSlider.gameObject.SetActive(true);
+        DroneBarSlider.value = 60f;
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            DroneBarSlider.value = duration - elapsed;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        DroneBarSlider.value = 0f;
+        DroneBar.SetActive(false);
+        // DroneBarSlider.value = 1f;
+        droneBarCoroutine = null;
+    }
+// ✅ 사운드 재생 / 정지 함수 분리
+    void PlayWalkSound()
+    {
+        if (PlayerWalkSoundID == null)
+            PlayerWalkSoundID = SoundManager.Instance.PlaySfx(SoundManager.Sfx.WalkOnEarth, true,1f);
+        isWalking = true;
+        isRunning = false;
+    }
+
+    void PlayRunSound()
+    {
+        if (PlayerRunSoundID == null)
+            PlayerRunSoundID = SoundManager.Instance.PlaySfx(SoundManager.Sfx.RunOnEarth, true,1f);
+        isRunning = true;
+        isWalking = false;
+    }
+
+    void StopWalkSound()
+    {
+        if (PlayerWalkSoundID != null)
+        {
+            SoundManager.Instance.StopSfx(PlayerWalkSoundID);
+            PlayerWalkSoundID = null;
+        }
+        isWalking = false;
+    }
+
+    void StopRunSound()
+    {
+        if (PlayerRunSoundID != null)
+        {
+            SoundManager.Instance.StopSfx(PlayerRunSoundID);
+            PlayerRunSoundID = null;
+        }
+        isRunning = false;
+    }
     void HandleRaycast()
     {
-        if (Input.GetMouseButton(0) && currentTarget != null) return;
+        if (Input.GetMouseButton(0) && currentTarget != null)
+        {
+            if (lastOutlinedTarget != null && lastOutlinedTarget.GetComponent<Outline>() is { } outline)
+                outline.enabled = false;
 
+            lastOutlinedTarget = null;
+            return;
+        }
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
         int tomatoLayer = LayerMask.NameToLayer("Tomato");
         int prefabLayer = LayerMask.NameToLayer("TomatoPrefab");
@@ -214,10 +383,23 @@ public class PlayerCtrl : MonoBehaviour
         {
             ResetAllTomatoStatus();
             ResetPlayerAnimation();
-            StopAllCoroutines();
+            StopCoroutines();
+            // StopAllCoroutines();
+
             isSeedScheduled = false;
             isPickScheduled = false;
             wateringCoroutine = null;
+            if (PlayerDigSoundID != null)
+            {
+                SoundManager.Instance.StopSfx(PlayerDigSoundID);
+                PlayerDigSoundID = null;
+            }
+            if (PlayerWaterSoundID != null)
+            {
+                SoundManager.Instance.StopSfx(PlayerWaterSoundID);
+                PlayerWaterSoundID = null;
+            }
+
             // ResetCamera();
             cineCameraList[0].SetActive(true);
             return;
@@ -228,7 +410,20 @@ public class PlayerCtrl : MonoBehaviour
             moveDirection = Vector3.zero;
             inputDirection = Vector3.zero;
             anim.SetBool("isTraceForward", false);
-           ResetCamera();
+            anim.SetBool("isShift", false);
+            if (PlayerWalkSoundID != null)
+            {
+                SoundManager.Instance.StopSfx(PlayerWalkSoundID);
+                PlayerWalkSoundID = null;
+            }
+
+            if (PlayerRunSoundID != null)
+            {
+                SoundManager.Instance.StopSfx(PlayerRunSoundID);
+                PlayerRunSoundID = null;
+            }
+            
+            ResetCamera();
            cineCameraList[1].SetActive(true);
 
             string tag = currentTarget.tag;
@@ -237,18 +432,27 @@ public class PlayerCtrl : MonoBehaviour
             {
                 playerTomato.PlayerUsing = true;
 
-                if (tag == "PlayerisPlantable" || tag == "PickedPlayerTomato")
+                if (tag == "PlayerisPlantable")// || tag == "PickedPlayerTomato"
                 {
                     if (!isSeedScheduled)
                     {
                         ResetAllTomatoStatus();
                         ResetPlayerAnimation();
+                        playerTomato.PlayerUsing = true;
+                        PlayerDigSoundID = SoundManager.Instance.PlaySfx(SoundManager.Sfx.DigSoil, true,1f);
                         isSeedScheduled = true;
-                        Debug.Log("Player is seeding tomato");
+                        // Debug.Log("Player is seeding tomato");
+                        anim.SetBool("isTraceForward",false);
                         anim.SetBool("isPlanting", true);
                         // cineCameraList[0].SetActive(false);
                         // cineCameraList[1].SetActive(true);
-                        StartCoroutine(DelaySetSeed(playerTomato));
+                        Debug.Log("player set seed for player tomato");
+                        playerDelaySetSeed = StartCoroutine(DelaySetSeed(playerTomato));
+                    }
+                    else
+                    {
+                        if(anim.GetBool("isTraceForward"))
+                            anim.SetBool("isTraceForward", false);
                     }
                 }
                 else if (tag == "UnripePlayerTomato")
@@ -262,6 +466,13 @@ public class PlayerCtrl : MonoBehaviour
                         ResetPlayerAnimation();
 
                         ResetAllTomatoStatus();
+                        playerTomato.PlayerUsing = true;
+                        if (PlayerDigSoundID != null)
+                        {
+                            SoundManager.Instance.StopSfx(PlayerDigSoundID);
+                            PlayerDigSoundID = null;
+                        }
+
                         wateringCoroutine = StartCoroutine(BackwardStepThenWatering(playerTomato));
                     }
                 }
@@ -270,6 +481,7 @@ public class PlayerCtrl : MonoBehaviour
                     ResetCamera();
                     cineCameraList[0].SetActive(true);
                     ResetPlayerAnimation();
+                    SoundManager.Instance.StopSfx(PlayerWaterSoundID);
 
                     ResetAllTomatoStatus();
                     // ResetCamera();
@@ -283,10 +495,12 @@ public class PlayerCtrl : MonoBehaviour
                         // cineCameraList[1].SetActive(true);
                         ResetPlayerAnimation();
                         ResetAllTomatoStatus();
+                        playerTomato.PlayerUsing = true;
+
                         anim.SetBool("isPicking", true);
 
                         isPickScheduled = true;
-                        StartCoroutine(DelaySetPicked(playerTomato));
+                        playerDelaySetPicked = StartCoroutine(DelaySetPicked(playerTomato));
                     }
                 }
                 else
@@ -302,46 +516,65 @@ public class PlayerCtrl : MonoBehaviour
                 {
                     if (!isPickScheduled)
                     {
+                        ResetPlayerAnimation();
+                        ResetAllTomatoStatus();
                         enemyTomato.PlayerUsing = true;
                         // cineCameraList[0].SetActive(false);
                         //
                         // cineCameraList[1].SetActive(true);
 
-                        ResetPlayerAnimation();
-                        ResetAllTomatoStatus();
 
                         anim.SetBool("isPicking", true);
                         isPickScheduled = true;
-                        StartCoroutine(DelaySetPicked(enemyTomato));
+                        enemyDelaySetPicked = StartCoroutine(DelaySetPicked(enemyTomato));
                     }
                 }
                 else
                 {
                     ResetPlayerAnimation();
+                    ResetCamera();
+                    cineCameraList[0].SetActive(true);
                 }
             }
         }
         else
         {
-            StopAllCoroutines();
+            StopCoroutines();
+            // StopAllCoroutines();
             isSeedScheduled = false;
             isPickScheduled = false;
             wateringCoroutine = null;
             ResetAllTomatoStatus();
             ResetPlayerAnimation();
             ResetCamera();
+            SoundManager.Instance.StopSfx(PlayerDigSoundID);
+            SoundManager.Instance.StopSfx(PlayerWaterSoundID);
             cineCameraList[0].SetActive(true);
         }
     }
 
+    void StopCoroutines()
+    {
+        if (playerDelaySetSeed != null)
+            StopCoroutine(playerDelaySetSeed);
+        if (playerDelaySetPicked != null)
+            StopCoroutine(playerDelaySetPicked);
+        if(enemyDelaySetPicked != null)
+            StopCoroutine(enemyDelaySetPicked);
+        if (wateringCoroutine != null)
+            StopCoroutine(wateringCoroutine);
+
+    }
     IEnumerator DelaySetSeed(PlayerTomatoCtrl tomatoScript)
     {
         yield return new WaitForSeconds(4f);
-        Debug.Log(tomatoScript);
-        Debug.Log("player set seed for player tomato");
+        // Debug.Log(tomatoScript);
+        // Debug.Log("player set seed for player tomato");
         tomatoScript.isSeeding = true;
-        Debug.Log(tomatoScript.isSeeding);
+        // Debug.Log(tomatoScript.isSeeding);
+        yield return new WaitForSeconds(0.5f);
         isSeedScheduled = false;
+        playerDelaySetSeed = null;
     }
 
     IEnumerator DelaySetPicked(PlayerTomatoCtrl tomatoScript)
@@ -349,6 +582,11 @@ public class PlayerCtrl : MonoBehaviour
         yield return new WaitForSeconds(4f);
         tomatoScript.isPicked = true;
         isPickScheduled = false;
+        PlayerScore += 6;
+        SoundManager.Instance.PlaySfx(SoundManager.Sfx.TomatoPick, false, 1f);
+        SoundManager.Instance.PlaySfx(SoundManager.Sfx.PointUp, false, 1f);
+
+        playerDelaySetPicked = null;
     }
 
     IEnumerator DelaySetPicked(EnemyTomatoCtrl tomatoScript)
@@ -356,6 +594,11 @@ public class PlayerCtrl : MonoBehaviour
         yield return new WaitForSeconds(4f);
         tomatoScript.isPicked = true;
         isPickScheduled = false;
+        PlayerScore += 4;
+        SoundManager.Instance.PlaySfx(SoundManager.Sfx.TomatoPick, false, 1f);
+        SoundManager.Instance.PlaySfx(SoundManager.Sfx.PointUp, false, 1f);
+
+        enemyDelaySetPicked = null;
     }
 
     IEnumerator BackwardStepThenWatering(PlayerTomatoCtrl tomatoScript)
@@ -382,6 +625,7 @@ public class PlayerCtrl : MonoBehaviour
 
         transform.position = targetPos;
         anim.SetBool("isTraceBackward", false);
+        PlayerWaterSoundID = SoundManager.Instance.PlaySfx(SoundManager.Sfx.WaterTomato, true,1f);
         anim.SetBool("isWatering", true);
         tomatoScript.isWatering = true;
         sprayer.SetActive(true);
@@ -394,6 +638,12 @@ public class PlayerCtrl : MonoBehaviour
         }
 
         yield return new WaitForSeconds(10f);
+        // if (PlayerWaterSoundID != null)
+        // {
+        //     PlayerWaterSoundID = null;
+        // }
+        SoundManager.Instance.StopSfx(PlayerWaterSoundID);
+
         wateringCoroutine = null;
     }
 
@@ -401,21 +651,22 @@ public class PlayerCtrl : MonoBehaviour
     {
         if (currentTarget == null) return;
         anim.SetBool("isTraceForward", false);
-
+        anim.SetBool("isTraceBackward", false);
         if (currentTarget.TryGetComponent<PlayerTomatoCtrl>(out var playerTomato))
         {
-            playerTomato.isSeeding = false;
+            // Debug.Log("Player reset all tomato status");
+            // playerTomato.isSeeding = false;
             playerTomato.isWatering = false;
             // playerTomato.isPicked = false;
             playerTomato.PlayerUsing = false;
-
+        
         }
         else if (currentTarget.TryGetComponent<EnemyTomatoCtrl>(out var enemyTomato))
         {
             if (enemyTomato.EnemyUsing == false)
             {
-                enemyTomato.isSeeding = false;
-                enemyTomato.isWatering = false;
+                // enemyTomato.isSeeding = false;
+                // enemyTomato.isWatering = false;
                 // enemyTomato.isPicked = false;
                 enemyTomato.PlayerUsing = false;
             }
@@ -438,33 +689,4 @@ public class PlayerCtrl : MonoBehaviour
         cineCameraList[2].SetActive(false);
     }
 
-    public void TiltCameraUp()
-    {
-        StartCoroutine(LerpCameraPitch(-30f));
-    }
-
-    IEnumerator LerpCameraPitch(float targetPitch)
-    {
-        float duration = 1f;
-        float elapsed = 0f;
-        float startPitch = cameraTransform.localRotation.eulerAngles.x;
-        float endPitch = startPitch + targetPitch;
-
-        while (elapsed < duration)
-        {
-            float currentPitch = Mathf.Lerp(startPitch, endPitch, elapsed / duration);
-            cameraTransform.localRotation = Quaternion.Euler(currentPitch, 0f, 0f);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        cameraTransform.localRotation = Quaternion.Euler(endPitch, 0f, 0f);
-    }
-    void OnGUI()
-    {
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 24;
-        style.normal.textColor = Color.white;
-        GUI.Label(new Rect(10, 10, 400, 40), debugMessage, style);
-    }
 }

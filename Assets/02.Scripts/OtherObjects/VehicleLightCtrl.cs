@@ -12,10 +12,23 @@ public class VehicleLightCtrl : MonoBehaviour
     public GameObject introCamera;
     public GameObject followCamera;
     private GameObject crossHair;
+    
+    
+    private String CarEngineSoundID;
+    private String CarAccelerationSoundID;
+    private String CarHornID;
+    // public AudioSource CarHorn;
+
+    void Awake()
+    {
+    }
     void Start()
     {
+        SetEmission(false);
         crossHair = GameObject.FindWithTag("crossHair");
-        crossHair.SetActive(false);
+        if(crossHair != null)
+            crossHair.SetActive(false);
+        CarEngineSoundID = SoundManager.Instance.Play3DSfx(SoundManager.Sfx.EngineStart,transform,1f);
         introCamera.SetActive(true);
         followCamera.SetActive(false);
         mudParticle.SetActive(false);
@@ -26,30 +39,44 @@ public class VehicleLightCtrl : MonoBehaviour
     IEnumerator FlickerSequence()
     {
         yield return new WaitForSeconds(1f); // ⏳ 3초 대기
-
+        CarHornID = SoundManager.Instance.Play3DSfx(SoundManager.Sfx.CarHorn,transform,1f);
         for (int i = 0; i < flickerCount; i++)
         {
             bool on = i % 2 == 0;
 
             SetLightsActive(on);
             SetEmission(on);
-
-            yield return new WaitForSeconds(0.5f);
+            // if (on) SoundManager.Instance.Play3DSfx(SoundManager.Sfx.CarHorn,transform,1f);
+            yield return new WaitForSeconds(0.4f);
         }
-
+        CarAccelerationSoundID = SoundManager.Instance.Play3DSfx(SoundManager.Sfx.CarAcceleration,transform,1f);
+        // SoundManager.Instance.Play3DSfx(SoundManager.Sfx.CarHorn,transform,1f);
         // 마지막은 항상 true로 고정
+        
         introCamera.SetActive(false);
         followCamera.SetActive(true);
         mudParticle.SetActive(true);
         SetLightsActive(true);
         SetEmission(true);
+        
+        yield return new WaitForSeconds(1f);
+        SoundManager.Instance.StopSfx(CarHornID);
     }
 
     void TurnOffCameras()
     {
         introCamera.SetActive(false);
         followCamera.SetActive(false);
-        crossHair.SetActive(true);
+        SoundManager.Instance.StopSfx(CarAccelerationSoundID);
+        if(crossHair != null && crossHair.activeSelf == false)
+            crossHair.SetActive(true);
+        if (GameManager.Instance.PLayerUsingItem)
+        {
+            GameManager.Instance.PLayerUsingItem = false;
+            return;
+        }
+
+        GameManager.Instance.EnemyUsingItem = false;
     }
     void SetLightsActive(bool isOn)
     {
@@ -78,6 +105,6 @@ public class VehicleLightCtrl : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("OnTriggerEnterVehicleLightCtrl");
-        Invoke(nameof(TurnOffCameras),3f);
+        Invoke(nameof(TurnOffCameras),2f);
     }
 }

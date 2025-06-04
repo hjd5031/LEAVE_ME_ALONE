@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class DayNightCycle : MonoBehaviour
@@ -9,6 +10,7 @@ public class DayNightCycle : MonoBehaviour
 
     private float startIntensity;
     public float nightIntensity = 0.05f;
+    public TextMeshProUGUI timeText;
 
     void Start()
     {
@@ -40,18 +42,18 @@ public class DayNightCycle : MonoBehaviour
 
     void OnGUI()
     {
-        // 경과 시간 MM:SS로 표시
-        int currentTime = Mathf.Clamp((int)elapsedTime, 0, (int)dayDuration);
-        int minutes = currentTime / 60;
-        int seconds = currentTime % 60;
-
-        string timeStr = $"{minutes:D2}:{seconds:D2}";
-
-        GUIStyle style = new GUIStyle(GUI.skin.label);
-        style.fontSize = 32;
-        style.alignment = TextAnchor.UpperCenter;
-        style.normal.textColor = Color.white;
-
-        GUI.Label(new Rect(0, 10, Screen.width, 50), $"Time: {timeStr}", style);
+        // // 경과 시간 MM:SS로 표시
+        // int currentTime = Mathf.Clamp((int)elapsedTime, 0, (int)dayDuration);
+        // int minutes = currentTime / 60;
+        // int seconds = currentTime % 60;
+        //
+        // string timeStr = $"{minutes:D2}:{seconds:D2}";
+        //
+        // GUIStyle style = new GUIStyle(GUI.skin.label);
+        // style.fontSize = 32;
+        // style.alignment = TextAnchor.UpperCenter;
+        // style.normal.textColor = Color.white;
+        //
+        // GUI.Label(new Rect(0, 10, Screen.width, 50), $"Time: {timeStr}", style);
     }
 }
