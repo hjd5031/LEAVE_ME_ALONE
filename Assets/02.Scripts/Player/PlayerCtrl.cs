@@ -334,18 +334,24 @@ public class PlayerCtrl : MonoBehaviour
             lastOutlinedTarget = null;
             return;
         }
-        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+
+        Ray rayPrefab = new Ray(cameraTransform.position, cameraTransform.forward);
+        Ray rayTomato = new Ray(cameraTransform.position, cameraTransform.forward);
+
         int tomatoLayer = LayerMask.NameToLayer("Tomato");
         int prefabLayer = LayerMask.NameToLayer("TomatoPrefab");
-        int mask = (1 << tomatoLayer) | (1 << prefabLayer);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 2f, mask))
+        int tomatoMask = 1 << tomatoLayer;
+        int prefabMask = 1 << prefabLayer;
+
+        // ✅ TomatoPrefab용 Ray → Outline 처리
+        if (Physics.Raycast(rayPrefab, out RaycastHit prefabHit, 2f, prefabMask))
         {
-            GameObject hitObj = hit.collider.gameObject;
+            GameObject hitObj = prefabHit.collider.gameObject;
 
             if (hitObj != lastOutlinedTarget)
             {
-                if (lastOutlinedTarget != null &&lastOutlinedTarget?.GetComponent<Outline>() is { } oldOutline)
+                if (lastOutlinedTarget != null && lastOutlinedTarget.GetComponent<Outline>() is { } oldOutline)
                     oldOutline.enabled = false;
 
                 if (hitObj.GetComponent<MeshRenderer>() != null || hitObj.GetComponent<SkinnedMeshRenderer>() != null)
@@ -356,26 +362,122 @@ public class PlayerCtrl : MonoBehaviour
 
                 lastOutlinedTarget = hitObj;
             }
-
-            if (hitObj.layer == tomatoLayer)
-                currentTarget = hitObj;
         }
         else
         {
-            if (lastOutlinedTarget != null && !lastOutlinedTarget.Equals(null))
-            {
-                var outline = lastOutlinedTarget.GetComponent<Outline>();
-                if (outline != null)
-                    outline.enabled = false;
-            }
+            // ❌ outline 제거
+            if (lastOutlinedTarget != null && lastOutlinedTarget.GetComponent<Outline>() is { } outline)
+                outline.enabled = false;
 
-            ResetAllTomatoStatus();
-            // ResetCamera();
-
-            currentTarget = null;
             lastOutlinedTarget = null;
         }
+
+        // ✅ Tomato용 Ray → currentTarget만 설정
+        if (Physics.Raycast(rayTomato, out RaycastHit tomatoHit, 2f, tomatoMask))
+        {
+            currentTarget = tomatoHit.collider.gameObject;
+        }
+        else
+        {
+            ResetAllTomatoStatus();
+            currentTarget = null;
+        }
     }
+    // void HandleRaycast()
+    // {
+    //     if (Input.GetMouseButton(0) && currentTarget != null)
+    //     {
+    //         if (lastOutlinedTarget != null && lastOutlinedTarget.GetComponent<Outline>() is { } outline)
+    //             outline.enabled = false;
+    //
+    //         lastOutlinedTarget = null;
+    //         return;
+    //     }
+    //     Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+    //     int tomatoLayer = LayerMask.NameToLayer("Tomato");
+    //     int prefabLayer = LayerMask.NameToLayer("TomatoPrefab");
+    //     int mask = (1 << tomatoLayer) | (1 << prefabLayer);
+    //
+    //     // if (Physics.Raycast(ray, out RaycastHit hit, 2f, mask))
+    //     // {
+    //     //     GameObject hitObj = hit.collider.gameObject;
+    //     //
+    //     //     if (hitObj != lastOutlinedTarget)
+    //     //     {
+    //     //         if (lastOutlinedTarget != null &&lastOutlinedTarget?.GetComponent<Outline>() is { } oldOutline)
+    //     //             oldOutline.enabled = false;
+    //     //
+    //     //         if (hitObj.GetComponent<MeshRenderer>() != null || hitObj.GetComponent<SkinnedMeshRenderer>() != null)
+    //     //         {
+    //     //             var newOutline = hitObj.GetComponent<Outline>() ?? hitObj.AddComponent<Outline>();
+    //     //             newOutline.enabled = true;
+    //     //         }
+    //     //
+    //     //         lastOutlinedTarget = hitObj;
+    //     //     }
+    //     //
+    //     //     if (hitObj.layer == tomatoLayer)
+    //     //         currentTarget = hitObj;
+    //     // }
+    //     // else
+    //     // {
+    //     //     if (lastOutlinedTarget != null && !lastOutlinedTarget.Equals(null))
+    //     //     {
+    //     //         var outline = lastOutlinedTarget.GetComponent<Outline>();
+    //     //         if (outline != null)
+    //     //             outline.enabled = false;
+    //     //     }
+    //     //
+    //     //     ResetAllTomatoStatus();
+    //     //     // ResetCamera();
+    //     //
+    //     //     currentTarget = null;
+    //     //     lastOutlinedTarget = null;
+    //     // }
+    //     if (Physics.Raycast(ray, out RaycastHit hit, 2f, mask))
+    //     {
+    //         GameObject hitObj = hit.collider.gameObject;
+    //         int hitLayer = hitObj.layer;
+    //
+    //         // 🔁 Outline 초기화
+    //         if (hitObj != lastOutlinedTarget)
+    //         {
+    //             if (lastOutlinedTarget != null && lastOutlinedTarget.GetComponent<Outline>() is { } oldOutline)
+    //                 oldOutline.enabled = false;
+    //
+    //             // ✔️ Outline 적용은 TomatoPrefab만
+    //             if (hitLayer == prefabLayer)
+    //             {
+    //                 if (hitObj.GetComponent<MeshRenderer>() != null || hitObj.GetComponent<SkinnedMeshRenderer>() != null)
+    //                 {
+    //                     var newOutline = hitObj.GetComponent<Outline>() ?? hitObj.AddComponent<Outline>();
+    //                     newOutline.enabled = true;
+    //                     lastOutlinedTarget = hitObj; // ✔️ outline된 오브젝트로만 기록
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 lastOutlinedTarget = null; // ✔️ Tomato는 outline 없음
+    //             }
+    //         }
+    //
+    //         // ✔️ Tomato 레이어만 currentTarget 설정
+    //         if (hitLayer == tomatoLayer)
+    //         {
+    //             currentTarget = hitObj;
+    //         }
+    //     }
+    //     else
+    //     {
+    //         // 🔁 Outline 제거
+    //         if (lastOutlinedTarget != null && lastOutlinedTarget.GetComponent<Outline>() is { } outline)
+    //             outline.enabled = false;
+    //
+    //         ResetAllTomatoStatus();
+    //         currentTarget = null;
+    //         lastOutlinedTarget = null;
+    //     }
+    // }
 
     void ChangeTomatoStatus()
     {
