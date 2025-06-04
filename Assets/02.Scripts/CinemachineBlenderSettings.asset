@@ -27,7 +27,7 @@ MonoBehaviour:
   - From: TP Camera
     To: FP Camera
     Blend:
-      Style: 4
+      Style: 0
       Time: 0.5
       CustomCurve:
         serializedVersion: 2
