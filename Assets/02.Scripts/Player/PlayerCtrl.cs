@@ -44,7 +44,7 @@ public class PlayerCtrl : MonoBehaviour
     public int PlayerScore = 0;//gamemanager
     
     
-    string debugMessage = "";
+    // string debugMessage = "";
     public GameObject CarItem;
     public GameObject ToxicDroneItem;//for enemy
     public GameObject BoostDroneItem;//for player itself
@@ -62,10 +62,13 @@ public class PlayerCtrl : MonoBehaviour
     public GameObject PlayerToxicDroneItem;
     public GameObject PlayerVehicleItem;
 
+    //for Boost Drone Time Left GUI
     public GameObject DroneBar;
     public Slider DroneBarSlider;
     private Coroutine droneBarCoroutine = null;
-
+    private float targetFOV = 75f;
+    public float fovChangeSpeed = 5f; // 속도 조절
+    public GameObject instructions;
     void Start()
     {
         ResetCamera();
@@ -81,19 +84,43 @@ public class PlayerCtrl : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         yRotation = transform.eulerAngles.y;
         // DroneBarSlider.value = 30f;
+        instructions.SetActive(false);
     }
 
     void Update()
     {
-        if (!(Input.GetMouseButton(0) && currentTarget != null))
-            HandleMovementInput();
-        CheckItemUsability();
-        HandleLook();
-        HandleRaycast();
-        ChangeTomatoStatus();
-        HandleUI();
+        ShowInstructions();
+        if (!instructions.activeSelf)
+        {
+            if (!(Input.GetMouseButton(0) && currentTarget != null))
+                HandleMovementInput();
+            CheckItemUsability();
+            HandleLook();
+            HandleRaycast();
+            ChangeTomatoStatus();
+            HandleUI();
+        }
     }
 
+    void ShowInstructions()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (instructions.activeSelf)
+            {
+                SoundManager.Instance.ChangeBgmVolume(1f);
+                instructions.SetActive(false);
+                Time.timeScale = 1f;
+            }
+            else
+            {
+                SoundManager.Instance.StopAllSfx();
+                SoundManager.Instance.ChangeBgmVolume(0.3f);
+                instructions.SetActive(true);
+                Time.timeScale = 0f;
+            }
+        }
+    }
     void HandleUI()
     {
         GameManager.Instance.PlayerScore = PlayerScore;
@@ -138,8 +165,8 @@ public class PlayerCtrl : MonoBehaviour
         //     debugMessage = "no Vehicle Item"+"\nno Drone Item\n" + PlayerScore;
         // }
     }
-    private float targetFOV = 75f;
-    public float fovChangeSpeed = 5f; // 속도 조절
+    // private float targetFOV = 75f;
+    // public float fovChangeSpeed = 5f; // 속도 조절
     void FixedUpdate()
     {
         // GameManager.Instance.PlayerScore = PlayerScore;
