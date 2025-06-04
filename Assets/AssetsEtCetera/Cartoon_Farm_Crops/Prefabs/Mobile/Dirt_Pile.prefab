@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33000012445629234}
   - component: {fileID: 23000013050269184}
   - component: {fileID: 64000010866939460}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Dirt_Pile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
