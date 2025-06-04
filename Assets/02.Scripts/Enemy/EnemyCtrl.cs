@@ -101,7 +101,7 @@ public class EnemyCtrl : MonoBehaviour
             GameManager.Instance.EnemyUsingItem = true;
             hasVehicleItem = false;
         }
-        else if (!GameManager.Instance.PLayerUsingItem &&
+        else if (hasDroneItem&&!GameManager.Instance.PLayerUsingItem &&
                  (RipePlayerTomato.Length + UnripePlayerTomato.Length + PickedPlayerTomato.Length) >= 3 && randint == 1)
         {
             Instantiate(ToxicDroneItem, ToxicDroneSpawnPoint.position, Quaternion.identity);
