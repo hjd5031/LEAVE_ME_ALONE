@@ -35,7 +35,7 @@ public partial class ChangePlayerTomatoIntoIsPickedAction : Action
 
         if (_playerTomato.CompareTag("RipePlayerTomato"))
         {
-            enemy.EnemyScore += 4;
+            enemy.enemyScore += 4;
             _playerTomato.isPicked = Value;
             Debug.Log($"✅ Target '{targetObj.name}'의 isPicked 값을 {Value}로 설정했습니다.");    
             // return Status.Success;

@@ -12,7 +12,7 @@ public partial class CheckTomatoDestroyedOrCanWaterCondition : Condition
     {
         GameObject targetObject = EnemyTomato.Value;
         var tomatoScript = targetObject.GetComponent<EnemyTomatoCtrl>();
-        if (!tomatoScript.CompareTag("UnripeEnemyTomato")||tomatoScript.PlayerUsing)
+        if (!tomatoScript.CompareTag("UnripeEnemyTomato")||tomatoScript.playerUsing)
         {
             return true;
         }

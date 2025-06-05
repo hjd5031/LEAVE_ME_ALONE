@@ -1,58 +1,68 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EnemyTomatoCtrl : MonoBehaviour
 {
-    public List<GameObject> tomatoList;
+    public List<GameObject> tomatoList;//성장 중 prefab 변화를 위한 list
 
-    private int _growthLevel;
+    public GameObject check;//익음 표시 오브젝트
+    public GameObject sun;//익는 중 표시 오브젝트
     
-    private GameObject _currentTomato;
-    public GameObject Check;
-    public GameObject Sun;
     
+    
+    //토마토의 상태 변화를 위한 불 변수
     public bool isWatering = false;
     public bool isPicked = false;
     public bool isSeeding = false;
-    private float growTimer = 0f;
-    private float growDelay = 2f; // 물을 줄 때마다 2초마다 성장 //gamemanager
-    private float ripeningTime = 10f;
-    public bool EnemyUsing;
-    public bool PlayerUsing;
+    
+    public bool enemyUsing;
+    public bool playerUsing;
+    
+    
+    private GameObject _currentTomato;//EnemyTomatoPrefab 하위에 있는 진짜 토마토(자식 오브젝트)
+    
+    private int _growthLevel;//현재 토마토의 성장 단계
+    
+    private float _growTimer = 0f;
+    private float _growDelay = 2f; // 물을 줄 때마다 2초마다 성장
+    private float _ripeningTime = 10f;//다 자라고 익은데까지의 시간
 
-    [SerializeField]private bool isGettingSun = false;
-    [SerializeField]private bool isRipen = false;
+    private bool _isGettingSun = false;
+    private bool _isRipen = false;
     void Start()
     {
-        // SpawnNextTomato(5);
         gameObject.tag = "EnemyisPlantable";//처음에는 빈땅 상태 아무것도 심지 않음
     }
 
     void Update()
     {
-        if (Sun != null) Sun.SetActive(isGettingSun);
-        if (Check != null) Check.SetActive(isRipen);
-        if (isSeeding && (CompareTag("EnemyisPlantable") || CompareTag("PickedEnemyTomato")))
-        {
-            InitializeTomatoStatus();
-        }
+        StatusIconCtrlForTomato();
+        CheckTomatoInitializeCondition();
+        TomatoGrowProcess();
+    }
+    
+    
+    //-------------------------------------------------------------------------------------------------------Tomato Growth bound
+    void TomatoGrowProcess()
+    {
         if (!isPicked)//플레이어가 수확하고 있지 않은 상태
         {
             if (!isWatering) return;
 
-            growTimer += Time.deltaTime;
+            _growTimer += Time.deltaTime;
 
-            if (growTimer >= growDelay)
+            if (_growTimer >= _growDelay)
             {
                 Grow();
-                growTimer = 0f;
+                _growTimer = 0f;
             }
 
             if (_growthLevel == 4)
             {
-                isGettingSun = true;
+                _isGettingSun = true;
                 gameObject.tag = "EnemyisSunning";
-                Invoke("TomatoRipenSun", ripeningTime);
+                Invoke("TomatoRipenSun", _ripeningTime);
             }
 
         }
@@ -64,11 +74,9 @@ public class EnemyTomatoCtrl : MonoBehaviour
             }
             _growthLevel = 5;
             SpawnNextTomato(5);
-            if (EnemyUsing&& _growthLevel ==5 && isPicked)
+            if (enemyUsing&& _growthLevel ==5 && isPicked)
             {
                 int itemRandint = Random.Range(0, 3);
-                Debug.Log("Enemy random itemint" + itemRandint);
-                // Debug.Log("itemgiven");
                 GameObject enemy = GameObject.FindWithTag("Enemy");
                 var enemyScript = enemy.GetComponent<EnemyCtrl>();
                 if (itemRandint == 0 && !enemyScript.hasVehicleItem)
@@ -81,45 +89,41 @@ public class EnemyTomatoCtrl : MonoBehaviour
                     enemyScript.hasDroneItem = true;
                 }
             }
-            // if (EnemyUsing)
-            // {
-            //     GameObject player = GameObject.FindGameObjectWithTag("Enemy");
-            //     var playerScript = player.GetComponent<EnemyCtrl>();
-            //     // Debug.Log(player);
-            //     // int randint = Random.Range(1, 11);
-            //     int randint = 1;
-            //     if (randint == 1) playerScript.hasVehicleItem = true;
-            // }
-            // SpawnNextTomato(5);
-            isGettingSun = false;
-            isRipen = false;
+            _isGettingSun = false;
+            _isRipen = false;
             isPicked = false;
             gameObject.tag = "PickedEnemyTomato";
         }
-        
-        
+    }
+    
+    void StatusIconCtrlForTomato()
+    {
+        if (sun != null) sun.SetActive(_isGettingSun);
+        if (check != null) check.SetActive(_isRipen);
     }
 
-    void InitializeTomatoStatus()
+    void CheckTomatoInitializeCondition()
+    {
+        if (isSeeding && (CompareTag("EnemyisPlantable") || CompareTag("PickedEnemyTomato")))
+        {
+            InitializeTomatoStatus();
+        }
+    }
+
+    void InitializeTomatoStatus()//Change Tomato Prefab into Seed(Lev 0)
     {
         _growthLevel = 0;
-        if (_currentTomato != null)
-        {
-            Destroy(_currentTomato);
-        }
+        DestroyTomato();
         gameObject.tag = "UnripeEnemyTomato";
         isPicked = false;
         isWatering = false;
         isSeeding = false;
-        isGettingSun = false;
-        isRipen = false;
-        // SpawnNextTomato(0);
-
-        // Debug.Log("TomatoStatus Initialized");
+        _isGettingSun = false;
+        _isRipen = false;
         Invoke("CallInitailizeTomatoPrefab",4f);
     }
 
-    void CallInitailizeTomatoPrefab()
+    void CallInitailizeTomatoPrefab()//Change Tomato Prefab into Seed(Lev 0)
     {
         SpawnNextTomato(0);
     }
@@ -127,27 +131,24 @@ public class EnemyTomatoCtrl : MonoBehaviour
     {
         if (_growthLevel + 1 >= 5)
         {
-            Invoke("TomatoRipenSun", ripeningTime);
+            Invoke("TomatoRipenSun", _ripeningTime);
             return;
         }
         _growthLevel++;
         SpawnNextTomato(_growthLevel);
-        // gameObject.tag = "UnripeEnemyTomato"; // 성장 중간도 태그 유지
     }
 
     void SpawnNextTomato(int level)
     {
-        if (_currentTomato != null)
-        {
-            Destroy(_currentTomato);
-        }
-
-        // Debug.Log("TomatoLevel: " + _growthLevel);
+        DestroyTomato();
         _currentTomato = Instantiate(tomatoList[level], transform.position, Quaternion.identity, transform);
+       ChangeColliderHeightbyLevel(level);
+    }
 
-        // 🌱 콜라이더 높이 설정
+    void ChangeColliderHeightbyLevel(int level)
+    {
         float height = 1.5f;
-        switch (level)
+        switch (level)//단계별 Collider 높이
         {
             case 0: height = 1.5f; break;
             case 1: 
@@ -156,75 +157,48 @@ public class EnemyTomatoCtrl : MonoBehaviour
             case 4: 
             case 5: height = 4.73f; break;
         }
-
-        // 🟢 CapsuleCollider 기준 예시
+        
         CapsuleCollider col = GetComponent<CapsuleCollider>();
-        if (col != null)
+        if (col != null)//Collider에 적용
         {
             col.height = height;
-            // col.center = new Vector3(0, height / 2f, 0); // 중심 높이 재조정
         }
-        // int itemRandint = Random.Range(0, 2);
-        // if (EnemyUsing&& _growthLevel ==5)
-        // {
-        //     // Debug.Log("itemgiven");
-        //     GameObject enemy = GameObject.FindWithTag("Enemy");
-        //     var enemyCtrl = enemy.GetComponent<EnemyCtrl>();
-        //     if (itemRandint == 0 && !enemyCtrl.hasVehicleItem)
-        //     {
-        //         int randint = Random.Range(0, 2);
-        //         if (randint == 1) enemyCtrl.hasVehicleItem = true;
-        //     }
-        //
-        //     if (itemRandint == 1 && !enemyCtrl.hasDroneItem)
-        //     {
-        //         int randint = Random.Range(0, 2);
-        //         if (randint == 1) enemyCtrl.hasDroneItem = true;
-        //     }
-        // }
     }
 
     void TomatoRipenSun()
     {
-        isGettingSun = false;
-        isRipen = true;
+        _isGettingSun = false;
+        _isRipen = true;
         gameObject.tag = "RipeEnemyTomato";
     }
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, 0.3f);
-    }
-
-    public void GrowDelayDecrease()
+    //-------------------------------------------------------------------------------------------------------Tomato Growth bound
+    //-------------------------------------------------------------------------------------------------------Item bound
+    public void GrowDelayDecrease()//Interact with boost left-time slider
     { 
-        Debug.Log("GrowDelayDecrease");
-        growDelay = 1f;
-        ripeningTime = 5f;
-        //todo activate boost icon
+        _growDelay = 1f;
+        _ripeningTime = 5f;
         Invoke("GrowDelayIncrease", 60f);
     }
-    void GrowDelayIncrease()
+    void GrowDelayIncrease()//recover grow delay and ripening time
     {
-        growDelay = 2f;
-        ripeningTime = 10f;
+        _growDelay = 2f;
+        _ripeningTime = 10f;
     }
 
     public void ToxicOnTomato()
     {
-        isGettingSun = false;
-        isRipen = false;
-        //todo isGettingBosst = false;
+        _isGettingSun = false;
+        _isRipen = false;
         isPicked = false;
-        growDelay = 2f;
+        _growDelay = 2f;
         _growthLevel = 0;
-        ripeningTime = 10f;
+        _ripeningTime = 10f;
         CancelInvoke(nameof(TomatoRipenSun));
-        if(_currentTomato!= null)
-            Destroy(_currentTomato);
+        DestroyTomato();
         gameObject.tag = "EnemyisPlantable";
     }
-    void OnTriggerEnter(Collider other)
+    
+    void OnTriggerEnter(Collider other)//Collision with Vehicle
     {
         if (other.CompareTag("PlayerCar"))
         {
@@ -235,14 +209,27 @@ public class EnemyTomatoCtrl : MonoBehaviour
             }
             else
             {
-                isGettingSun = false;
-                isRipen = false;
+                _isGettingSun = false;
+                _isRipen = false;
                 isPicked = false;
                 _growthLevel = 0;
                 CancelInvoke(nameof(TomatoRipenSun));
-                Destroy(_currentTomato);
+                DestroyTomato();
                 gameObject.tag = "EnemyisPlantable";
             }
         }
     }
+    //-------------------------------------------------------------------------------------------------------Item bound
+    void DestroyTomato()
+    {
+        if (_currentTomato != null)
+        {
+            Destroy(_currentTomato);
+        }
+    }
 }
+    // void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.green;
+    //     Gizmos.DrawWireSphere(transform.position, 0.3f);
+    // }

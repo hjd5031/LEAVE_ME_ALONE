@@ -12,42 +12,13 @@ public class HoverDrone : MonoBehaviour
     void Start()
     {
         initialPosition = transform.position;
-
-        // // "Player" 태그가 붙은 오브젝트 찾기
-        // GameObject player = GameObject.FindWithTag("Player");
-        // if (player != null)
-        // {
-        //     targetTransform = player.transform;
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("Player 태그를 가진 오브젝트를 찾을 수 없습니다.");
-        // }
     }
 
     void Update()
     {
-        // ⬆️ 호버링 (y값을 사인 함수로 위아래 움직임)
+        //호버링 (y값을 사인 함수로 위아래 움직임)
         float offsetY = Mathf.Sin(Time.time * hoverSpeed) * hoverAmplitude;
         transform.position = initialPosition + new Vector3(0f, offsetY, 0f);
 
-        // // 👀 Y축 회전으로만 대상 바라보기
-        // if (targetTransform != null)
-        // {
-        //     // 대상 위치의 y를 동일하게 해서 수평 회전만 하도록 함
-        //     Vector3 targetPos = targetTransform.position;
-        //     targetPos.y = transform.position.y;
-        //
-        //     // 방향 벡터 계산
-        //     Vector3 direction = (targetPos - transform.position).normalized;
-        //
-        //     // 방향이 유효할 때만 회전
-        //     if (direction != Vector3.zero)
-        //     {
-        //         Quaternion targetRotation = Quaternion.LookRotation(direction);
-        //         targetRotation *= Quaternion.Euler(0, 180f, 0); // Y축 180도 회전 보정
-        //         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSmoothSpeed * Time.deltaTime);
-        //     }
-        // }
     }
 }

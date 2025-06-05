@@ -14,17 +14,8 @@ public partial class ToggleEnemyUsingTomatoAction : Action
     protected override Status OnStart()
     {
         var tomatoScript = EnemyTomato.Value.GetComponent<EnemyTomatoCtrl>();
-        tomatoScript.EnemyUsing = value;
+        tomatoScript.enemyUsing = value;
         return Status.Success;
     }
-
-    // protected override Status OnUpdate()
-    // {
-    //     return Status.Success;
-    // }
-    //
-    // protected override void OnEnd()
-    // {
-    // }
 }
 

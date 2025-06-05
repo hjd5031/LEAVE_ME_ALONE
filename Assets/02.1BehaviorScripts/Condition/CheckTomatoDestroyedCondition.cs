@@ -13,7 +13,7 @@ public partial class CheckTomatoDestroyedCondition : Condition
     {
         GameObject targetObject = Target.Value;
         var tomatoScript = targetObject.GetComponent<EnemyTomatoCtrl>();
-        if (!tomatoScript.CompareTag("RipeEnemyTomato")||tomatoScript.PlayerUsing)
+        if (!tomatoScript.CompareTag("RipeEnemyTomato")||tomatoScript.playerUsing)
         {
             SoundManager.Instance.PlaySfx(SoundManager.Sfx.EnemyFrustrated, false, 1f);
             return true;

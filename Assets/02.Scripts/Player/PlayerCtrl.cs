@@ -9,47 +9,55 @@ using Outline = cakeslice.Outline;
 public class PlayerCtrl : MonoBehaviour
 {
     public CinemachineCamera FPCamera;
+    
+    public GameObject currentTarget = null;
+    public GameObject[] cineCameraList;
     public GameObject sprayer;
     public GameObject basket;
+    public GameObject CarItem;
+    public GameObject ToxicDroneItem;//for enemy
+    public GameObject BoostDroneItem;//for player itself
+    
+    public Transform cameraTransform;//Player Camera Transform
+    
+    public Transform ToxicDroneSpawnPoint;
+    public Transform BoostDroneSpawnPoint;
+    public GameObject PlayerBoostDroneItem;
+    public GameObject PlayerToxicDroneItem;
+    public GameObject PlayerVehicleItem;
+    
+    //for Boost Drone Time Left GUI
+    public GameObject DroneBar;
+    public Slider DroneBarSlider;
+    public GameObject instructions;
+
+    public bool hasVehicleItem = false;//gamemanager
+    public bool hasDroneItem = false;//gamemanager
+    public int PlayerScore = 0;//gamemanager
     public float walkSpeed = 3f;
     public float runSpeed = 7f;
     public float mouseSensitivity = 3f;
-    public Transform cameraTransform;
-    public GameObject[] cineCameraList;
 
-    private Rigidbody rb;
-    private Animator anim;
-    private Vector3 inputDirection;
-    private Vector3 moveDirection;
-    private float yRotation = 0f;
-    private float xRotation = 0f;
-
-    public GameObject currentTarget = null;
     private GameObject lastOutlinedTarget = null;
+    private Rigidbody rb;
 
     private Coroutine wateringCoroutine = null;
     private Coroutine playerDelaySetSeed = null;
     private Coroutine playerDelaySetPicked = null;
     private Coroutine enemyDelaySetPicked = null;
+    private Coroutine droneBarCoroutine = null;
+    
+    private Animator anim;
+    private Vector3 inputDirection;
+    private Vector3 moveDirection;
+    
+    private float yRotation = 0f;
+    private float xRotation = 0f;
 
     private float lockedYRotation = 0f;
     private bool isRotatingLocked = false;
-
     private bool isSeedScheduled = false;
     private bool isPickScheduled = false;
-
-
-    public bool hasVehicleItem = false;//gamemanager
-    public bool hasDroneItem = false;//gamemanager
-    public int PlayerScore = 0;//gamemanager
-    
-    
-    // string debugMessage = "";
-    public GameObject CarItem;
-    public GameObject ToxicDroneItem;//for enemy
-    public GameObject BoostDroneItem;//for player itself
-    public Transform ToxicDroneSpawnPoint;
-    public Transform BoostDroneSpawnPoint;
     private bool isTurning;
 
 
@@ -58,32 +66,31 @@ public class PlayerCtrl : MonoBehaviour
     private string PlayerWaterSoundID;
     private string PlayerDigSoundID;
     
-    public GameObject PlayerBoostDroneItem;
-    public GameObject PlayerToxicDroneItem;
-    public GameObject PlayerVehicleItem;
 
-    //for Boost Drone Time Left GUI
-    public GameObject DroneBar;
-    public Slider DroneBarSlider;
-    private Coroutine droneBarCoroutine = null;
     private float targetFOV = 75f;
     public float fovChangeSpeed = 5f; // 속도 조절
-    public GameObject instructions;
+    
     void Start()
     {
         ResetCamera();
-        cineCameraList[0].SetActive(true);
-        sprayer.SetActive(false);
+        cineCameraList[0].SetActive(true);//FP 카메라로 초기화(First Person)
+        //cineCameraList[1]은 Third Person
+        
+        sprayer.SetActive(false);//플레이어 손 오브젝트 초기화
         basket.SetActive(false);
+        
+        //아이템 보유 초기화
         PlayerVehicleItem.SetActive(false);
         PlayerToxicDroneItem.SetActive(false);
         PlayerBoostDroneItem.SetActive(false);
         DroneBar.SetActive(false);
+        
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        
+        //커서 잠그고 설명서 UI 끄기
         Cursor.lockState = CursorLockMode.Locked;
         yRotation = transform.eulerAngles.y;
-        // DroneBarSlider.value = 30f;
         instructions.SetActive(false);
     }
 
@@ -102,71 +109,7 @@ public class PlayerCtrl : MonoBehaviour
         }
     }
 
-    void ShowInstructions()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            if (instructions.activeSelf)
-            {
-                SoundManager.Instance.ChangeBgmVolume(1f);
-                instructions.SetActive(false);
-                Time.timeScale = 1f;
-            }
-            else
-            {
-                SoundManager.Instance.StopAllSfx();
-                SoundManager.Instance.ChangeBgmVolume(0.3f);
-                instructions.SetActive(true);
-                Time.timeScale = 0f;
-            }
-        }
-    }
-    void HandleUI()
-    {
-        GameManager.Instance.PlayerScore = PlayerScore;
-        if (hasVehicleItem)
-        {
-            PlayerVehicleItem.SetActive(true);
-        }
-        else
-        {
-            PlayerVehicleItem.SetActive(false);
-        }
-
-        if (hasDroneItem)
-        {
-            PlayerToxicDroneItem.SetActive(true);
-            PlayerBoostDroneItem.SetActive(true);
-        }
-        else
-        {
-            PlayerToxicDroneItem.SetActive(false);
-            PlayerBoostDroneItem.SetActive(false);
-        }
-        
-        // if (hasVehicleItem && hasDroneItem)
-        // {
-        //     // ResetCamera();
-        //     debugMessage = "has Vehicle Item"+"\nhas Drone Item\n" + PlayerScore;
-        // }
-        // if (!hasVehicleItem && hasDroneItem)
-        // {
-        //     // ResetCamera();
-        //     debugMessage = "no Vehicle Item"+"\nhas Drone Item\n" + PlayerScore;
-        // }
-        // if (hasVehicleItem && !hasDroneItem)
-        // {
-        //     // ResetCamera();
-        //     debugMessage = "has Vehicle Item"+"\nno Drone Item\n" + PlayerScore;
-        // }
-        // if (!hasVehicleItem && !hasDroneItem)
-        // {
-        //     // ResetCamera();
-        //     debugMessage = "no Vehicle Item"+"\nno Drone Item\n" + PlayerScore;
-        // }
-    }
-    // private float targetFOV = 75f;
-    // public float fovChangeSpeed = 5f; // 속도 조절
+    
     void FixedUpdate()
     {
         // GameManager.Instance.PlayerScore = PlayerScore;
@@ -315,42 +258,7 @@ public class PlayerCtrl : MonoBehaviour
         // DroneBarSlider.value = 1f;
         droneBarCoroutine = null;
     }
-// ✅ 사운드 재생 / 정지 함수 분리
-    void PlayWalkSound()
-    {
-        if (PlayerWalkSoundID == null)
-            PlayerWalkSoundID = SoundManager.Instance.PlaySfx(SoundManager.Sfx.WalkOnEarth, true,1f);
-        isWalking = true;
-        isRunning = false;
-    }
-
-    void PlayRunSound()
-    {
-        if (PlayerRunSoundID == null)
-            PlayerRunSoundID = SoundManager.Instance.PlaySfx(SoundManager.Sfx.RunOnEarth, true,1f);
-        isRunning = true;
-        isWalking = false;
-    }
-
-    void StopWalkSound()
-    {
-        if (PlayerWalkSoundID != null)
-        {
-            SoundManager.Instance.StopSfx(PlayerWalkSoundID);
-            PlayerWalkSoundID = null;
-        }
-        isWalking = false;
-    }
-
-    void StopRunSound()
-    {
-        if (PlayerRunSoundID != null)
-        {
-            SoundManager.Instance.StopSfx(PlayerRunSoundID);
-            PlayerRunSoundID = null;
-        }
-        isRunning = false;
-    }
+    
     void HandleRaycast()
     {
         if (Input.GetMouseButton(0) && currentTarget != null)
@@ -371,7 +279,7 @@ public class PlayerCtrl : MonoBehaviour
         int tomatoMask = 1 << tomatoLayer;
         int prefabMask = 1 << prefabLayer;
 
-        // ✅ TomatoPrefab용 Ray → Outline 처리
+        //TomatoPrefab용 Ray → Outline 처리
         if (Physics.Raycast(rayPrefab, out RaycastHit prefabHit, 2f, prefabMask))
         {
             GameObject hitObj = prefabHit.collider.gameObject;
@@ -392,14 +300,14 @@ public class PlayerCtrl : MonoBehaviour
         }
         else
         {
-            // ❌ outline 제거
+            //outline 제거
             if (lastOutlinedTarget != null && lastOutlinedTarget.GetComponent<Outline>() is { } outline)
                 outline.enabled = false;
 
             lastOutlinedTarget = null;
         }
 
-        // ✅ Tomato용 Ray → currentTarget만 설정
+        //Tomato용 Ray → currentTarget만 설정
         if (Physics.Raycast(rayTomato, out RaycastHit tomatoHit, 2f, tomatoMask))
         {
             currentTarget = tomatoHit.collider.gameObject;
@@ -410,102 +318,6 @@ public class PlayerCtrl : MonoBehaviour
             currentTarget = null;
         }
     }
-    // void HandleRaycast()
-    // {
-    //     if (Input.GetMouseButton(0) && currentTarget != null)
-    //     {
-    //         if (lastOutlinedTarget != null && lastOutlinedTarget.GetComponent<Outline>() is { } outline)
-    //             outline.enabled = false;
-    //
-    //         lastOutlinedTarget = null;
-    //         return;
-    //     }
-    //     Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-    //     int tomatoLayer = LayerMask.NameToLayer("Tomato");
-    //     int prefabLayer = LayerMask.NameToLayer("TomatoPrefab");
-    //     int mask = (1 << tomatoLayer) | (1 << prefabLayer);
-    //
-    //     // if (Physics.Raycast(ray, out RaycastHit hit, 2f, mask))
-    //     // {
-    //     //     GameObject hitObj = hit.collider.gameObject;
-    //     //
-    //     //     if (hitObj != lastOutlinedTarget)
-    //     //     {
-    //     //         if (lastOutlinedTarget != null &&lastOutlinedTarget?.GetComponent<Outline>() is { } oldOutline)
-    //     //             oldOutline.enabled = false;
-    //     //
-    //     //         if (hitObj.GetComponent<MeshRenderer>() != null || hitObj.GetComponent<SkinnedMeshRenderer>() != null)
-    //     //         {
-    //     //             var newOutline = hitObj.GetComponent<Outline>() ?? hitObj.AddComponent<Outline>();
-    //     //             newOutline.enabled = true;
-    //     //         }
-    //     //
-    //     //         lastOutlinedTarget = hitObj;
-    //     //     }
-    //     //
-    //     //     if (hitObj.layer == tomatoLayer)
-    //     //         currentTarget = hitObj;
-    //     // }
-    //     // else
-    //     // {
-    //     //     if (lastOutlinedTarget != null && !lastOutlinedTarget.Equals(null))
-    //     //     {
-    //     //         var outline = lastOutlinedTarget.GetComponent<Outline>();
-    //     //         if (outline != null)
-    //     //             outline.enabled = false;
-    //     //     }
-    //     //
-    //     //     ResetAllTomatoStatus();
-    //     //     // ResetCamera();
-    //     //
-    //     //     currentTarget = null;
-    //     //     lastOutlinedTarget = null;
-    //     // }
-    //     if (Physics.Raycast(ray, out RaycastHit hit, 2f, mask))
-    //     {
-    //         GameObject hitObj = hit.collider.gameObject;
-    //         int hitLayer = hitObj.layer;
-    //
-    //         // 🔁 Outline 초기화
-    //         if (hitObj != lastOutlinedTarget)
-    //         {
-    //             if (lastOutlinedTarget != null && lastOutlinedTarget.GetComponent<Outline>() is { } oldOutline)
-    //                 oldOutline.enabled = false;
-    //
-    //             // ✔️ Outline 적용은 TomatoPrefab만
-    //             if (hitLayer == prefabLayer)
-    //             {
-    //                 if (hitObj.GetComponent<MeshRenderer>() != null || hitObj.GetComponent<SkinnedMeshRenderer>() != null)
-    //                 {
-    //                     var newOutline = hitObj.GetComponent<Outline>() ?? hitObj.AddComponent<Outline>();
-    //                     newOutline.enabled = true;
-    //                     lastOutlinedTarget = hitObj; // ✔️ outline된 오브젝트로만 기록
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 lastOutlinedTarget = null; // ✔️ Tomato는 outline 없음
-    //             }
-    //         }
-    //
-    //         // ✔️ Tomato 레이어만 currentTarget 설정
-    //         if (hitLayer == tomatoLayer)
-    //         {
-    //             currentTarget = hitObj;
-    //         }
-    //     }
-    //     else
-    //     {
-    //         // 🔁 Outline 제거
-    //         if (lastOutlinedTarget != null && lastOutlinedTarget.GetComponent<Outline>() is { } outline)
-    //             outline.enabled = false;
-    //
-    //         ResetAllTomatoStatus();
-    //         currentTarget = null;
-    //         lastOutlinedTarget = null;
-    //     }
-    // }
-
     void ChangeTomatoStatus()
     {
         if (currentTarget == null)
@@ -513,7 +325,6 @@ public class PlayerCtrl : MonoBehaviour
             ResetAllTomatoStatus();
             ResetPlayerAnimation();
             StopCoroutines();
-            // StopAllCoroutines();
 
             isSeedScheduled = false;
             isPickScheduled = false;
@@ -528,8 +339,6 @@ public class PlayerCtrl : MonoBehaviour
                 SoundManager.Instance.StopSfx(PlayerWaterSoundID);
                 PlayerWaterSoundID = null;
             }
-
-            // ResetCamera();
             cineCameraList[0].SetActive(true);
             return;
         }
@@ -570,11 +379,8 @@ public class PlayerCtrl : MonoBehaviour
                         playerTomato.PlayerUsing = true;
                         PlayerDigSoundID = SoundManager.Instance.PlaySfx(SoundManager.Sfx.DigSoil, true,1f);
                         isSeedScheduled = true;
-                        // Debug.Log("Player is seeding tomato");
                         anim.SetBool("isTraceForward",false);
                         anim.SetBool("isPlanting", true);
-                        // cineCameraList[0].SetActive(false);
-                        // cineCameraList[1].SetActive(true);
                         Debug.Log("player set seed for player tomato");
                         playerDelaySetSeed = StartCoroutine(DelaySetSeed(playerTomato));
                     }
@@ -588,10 +394,6 @@ public class PlayerCtrl : MonoBehaviour
                 {
                     if (wateringCoroutine == null)
                     {
-                        // cineCameraList[0].SetActive(false);
-                        //
-                        // cineCameraList[1].SetActive(true);
-
                         ResetPlayerAnimation();
 
                         ResetAllTomatoStatus();
@@ -619,9 +421,6 @@ public class PlayerCtrl : MonoBehaviour
                 {
                     if (!isPickScheduled)
                     {
-                        // cineCameraList[0].SetActive(false);
-                        //
-                        // cineCameraList[1].SetActive(true);
                         ResetPlayerAnimation();
                         ResetAllTomatoStatus();
                         playerTomato.PlayerUsing = true;
@@ -641,18 +440,13 @@ public class PlayerCtrl : MonoBehaviour
             }
             else if (currentTarget.TryGetComponent<EnemyTomatoCtrl>(out var enemyTomato))
             {
-                if (tag == "RipeEnemyTomato"&&!enemyTomato.EnemyUsing)
+                if (tag == "RipeEnemyTomato"&&!enemyTomato.enemyUsing)
                 {
                     if (!isPickScheduled)
                     {
                         ResetPlayerAnimation();
                         ResetAllTomatoStatus();
-                        enemyTomato.PlayerUsing = true;
-                        // cineCameraList[0].SetActive(false);
-                        //
-                        // cineCameraList[1].SetActive(true);
-
-
+                        enemyTomato.playerUsing = true;
                         anim.SetBool("isPicking", true);
                         isPickScheduled = true;
                         enemyDelaySetPicked = StartCoroutine(DelaySetPicked(enemyTomato));
@@ -792,12 +586,12 @@ public class PlayerCtrl : MonoBehaviour
         }
         else if (currentTarget.TryGetComponent<EnemyTomatoCtrl>(out var enemyTomato))
         {
-            if (enemyTomato.EnemyUsing == false)
+            if (enemyTomato.enemyUsing == false)
             {
                 // enemyTomato.isSeeding = false;
                 // enemyTomato.isWatering = false;
                 // enemyTomato.isPicked = false;
-                enemyTomato.PlayerUsing = false;
+                enemyTomato.playerUsing = false;
             }
         }
     }
@@ -817,5 +611,85 @@ public class PlayerCtrl : MonoBehaviour
         cineCameraList[1].SetActive(false);
         cineCameraList[2].SetActive(false);
     }
+    //-------------------------------------------------------------------------------------------for Sound Effect
+    void PlayWalkSound()
+    {
+        if (PlayerWalkSoundID == null)
+            PlayerWalkSoundID = SoundManager.Instance.PlaySfx(SoundManager.Sfx.WalkOnEarth, true,1f);
+        isWalking = true;
+        isRunning = false;
+    }
 
+    void PlayRunSound()
+    {
+        if (PlayerRunSoundID == null)
+            PlayerRunSoundID = SoundManager.Instance.PlaySfx(SoundManager.Sfx.RunOnEarth, true,1f);
+        isRunning = true;
+        isWalking = false;
+    }
+
+    void StopWalkSound()
+    {
+        if (PlayerWalkSoundID != null)
+        {
+            SoundManager.Instance.StopSfx(PlayerWalkSoundID);
+            PlayerWalkSoundID = null;
+        }
+        isWalking = false;
+    }
+
+    void StopRunSound()
+    {
+        if (PlayerRunSoundID != null)
+        {
+            SoundManager.Instance.StopSfx(PlayerRunSoundID);
+            PlayerRunSoundID = null;
+        }
+        isRunning = false;
+    }
+    //-------------------------------------------------------------------------------------------for Sound Effect
+    //-------------------------------------------------------------------------------player UI Bound
+    void ShowInstructions()//설명서를 켜려면 Tab을 사용하고 음량이 줄어들고 게임이 멈춥니다.
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (instructions.activeSelf)
+            {
+                SoundManager.Instance.ChangeBgmVolume(1f);
+                instructions.SetActive(false);
+                Time.timeScale = 1f;
+            }
+            else
+            {
+                SoundManager.Instance.StopAllSfx();
+                SoundManager.Instance.ChangeBgmVolume(0.3f);
+                instructions.SetActive(true);
+                Time.timeScale = 0f;
+            }
+        }
+    }
+    void HandleUI()
+    {
+        GameManager.Instance.PlayerScore = PlayerScore;
+        if (hasVehicleItem)
+        {
+            PlayerVehicleItem.SetActive(true);
+        }
+        else
+        {
+            PlayerVehicleItem.SetActive(false);
+        }
+
+        if (hasDroneItem)
+        {
+            PlayerToxicDroneItem.SetActive(true);
+            PlayerBoostDroneItem.SetActive(true);
+        }
+        else
+        {
+            PlayerToxicDroneItem.SetActive(false);
+            PlayerBoostDroneItem.SetActive(false);
+        }
+    }
+    //-------------------------------------------------------------------------------player UI Bound
 }

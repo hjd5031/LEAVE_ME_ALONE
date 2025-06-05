@@ -37,23 +37,8 @@ public partial class WaterUntilTomatoRipeAction : Action
                 return Status.Success;
             }
         }
-        // else
-        // {
-        //     return Status.Running;
-        // }
         return Status.Running;
     }
-
-    // Status CheckPlayerTomatoCondition()
-    // {
-    //     foreach(var tomato in GameManager.Instance.enemyTomatoes)
-    //     {
-    //         if(tomato.tag == "RipeEnemyTomato")
-    //             return Status.Success;
-    //     }
-    //
-    //     return Status.Running;
-    // }
     protected override void OnEnd()
     {
     }
