@@ -32,7 +32,7 @@ public class FenceCtrlNoSound : MonoBehaviour
             _rb.constraints = RigidbodyConstraints.None;
             _rb.AddExplosionForce(explosionForce, explosionPos, explosionRadius, upwardsModifier, ForceMode.Impulse);
             // SoundManager.Instance.Play3DSfx(SoundManager.Sfx.FenceBreak,0.5f);
-            Debug.Log("🚗 Fence hit by car → flying!");
+            // Debug.Log("🚗 Fence hit by car → flying!");
 
             // ✅ 5초 후 재생성
             Invoke(nameof(Regen), 5f);

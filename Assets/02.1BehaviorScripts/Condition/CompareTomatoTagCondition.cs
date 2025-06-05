@@ -18,7 +18,7 @@ internal class CompareTomatoTagCondition : Condition
         foreach (GameObject go in tagged)
         {
             _enemyTomato = go.GetComponent<EnemyTomatoCtrl>();
-            if(!_enemyTomato.PlayerUsing)
+            if(!_enemyTomato.playerUsing)
                 usableTomatoCount++;
         }
         // int randint = UnityEngine.Random.Range(1, 3);

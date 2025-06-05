@@ -17,14 +17,5 @@ public partial class ToggleEnemyUsingPlayerTomatoAction : Action
         tomatoScript.EnemyUsing = Value;
         return Status.Success;
     }
-    //
-    // protected override Status OnUpdate()
-    // {
-    //     return Status.Success;
-    // }
-    //
-    // protected override void OnEnd()
-    // {
-    // }
 }
 

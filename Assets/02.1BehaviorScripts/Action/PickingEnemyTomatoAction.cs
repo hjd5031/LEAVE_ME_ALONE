@@ -35,7 +35,7 @@ public partial class PickingEnemyTomatoAction : Action
 
         if (tomato.tag == "PickedEnemyTomato")
         {
-            enemy.EnemyScore += 6;
+            enemy.enemyScore += 6;
             return Status.Success;
         }
         if(tomato.tag == "EnemyisPlantable")return Status.Success;
