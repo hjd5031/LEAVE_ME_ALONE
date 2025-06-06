@@ -561,10 +561,7 @@ public class PlayerCtrl : MonoBehaviour
         }
 
         yield return new WaitForSeconds(10f);
-        // if (PlayerWaterSoundID != null)
-        // {
-        //     PlayerWaterSoundID = null;
-        // }
+   
         SoundManager.Instance.StopSfx(PlayerWaterSoundID);
 
         wateringCoroutine = null;
