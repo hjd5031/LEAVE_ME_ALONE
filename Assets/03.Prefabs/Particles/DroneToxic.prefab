@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 198000011809462866}
   - component: {fileID: 199000014169630576}
   m_Layer: 0
-  m_Name: WaterfallSmall
+  m_Name: Spray
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
