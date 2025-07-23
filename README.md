@@ -20,13 +20,11 @@ Pickup Truck은 사용하면 상대방의 농장으로 달려가 밭을 갈아�
 Boost Drone은 자신의 농장에 버프를 줘 익는 과정을 각각 1초로 감소, 익는 시간을 5초로 감소 시킵니다.  
 Toxic Drone은 상대의 밭으로 날라가 독극물을 뿌려 전멸 시킵니다.  
 
-
+--- 
 ## Final Term Project for the Game Programming Course, Department of Software, Sejong University.
 
-This game is a competitive tomato farming game where you compete against an AI farmer to see who can harvest the most tomatoes within 5 minutes.  
-The AI farmer can do everything the player can, based on its own judgment.
+## This game is a competitive tomato farming game where you compete against an AI farmer to see who can harvest the most tomatoes within 5 minutes. The AI farmer can do everything the player can, based on its own judgment.
 
----
 
 Tomatoes go through 5 stages: Planting, Growing, Ripening, Fully Ripe, and Harvest.  
 During the Growing stage, there are 4 internal tomato forms.  
