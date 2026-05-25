@@ -54,15 +54,13 @@ MonoBehaviour:
   - {fileID: 7602706729405631181, guid: ae82f38885f8940a595508e4d2bc0f27, type: 3}
   - {fileID: 2792832150223904392, guid: eab3cf83243744e6086eb81cff264d3c, type: 3}
   - {fileID: 4184692941909210187, guid: f5ff348650abe45a58ffbf0f1d0d80b1, type: 3}
-  Check: {fileID: 7387613034390875773}
-  Sun: {fileID: 7841670737236342988}
+  check: {fileID: 7387613034390875773}
+  sun: {fileID: 7841670737236342988}
   isWatering: 0
   isPicked: 0
   isSeeding: 0
-  EnemyUsing: 0
-  PlayerUsing: 0
-  isGettingSun: 0
-  isRipen: 0
+  enemyUsing: 0
+  playerUsing: 0
 --- !u!136 &6337792533540508054
 CapsuleCollider:
   m_ObjectHideFlags: 0

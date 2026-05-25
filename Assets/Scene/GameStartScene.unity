@@ -5008,23 +5008,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FPCamera: {fileID: 265406509}
-  sprayer: {fileID: 1039729178}
-  basket: {fileID: 1895407046}
-  walkSpeed: 2
-  runSpeed: 7
-  mouseSensitivity: 3
-  cameraTransform: {fileID: 634255788}
+  currentTarget: {fileID: 0}
   cineCameraList:
   - {fileID: 265406506}
   - {fileID: 1541195573}
   - {fileID: 366721646}
-  currentTarget: {fileID: 0}
-  hasVehicleItem: 0
-  hasDroneItem: 1
-  PlayerScore: 0
+  sprayer: {fileID: 1039729178}
+  basket: {fileID: 1895407046}
   CarItem: {fileID: 332987431099281487, guid: 75444bffb0938435c9de0ecfee7f2e1a, type: 3}
   ToxicDroneItem: {fileID: 1260814204893200998, guid: d221bf051b5984517b8bd5fb398a5d19, type: 3}
   BoostDroneItem: {fileID: 2124865030735178248, guid: cce5a69b8a7cf4631827e6b4386047be, type: 3}
+  cameraTransform: {fileID: 634255788}
   ToxicDroneSpawnPoint: {fileID: 1719544828}
   BoostDroneSpawnPoint: {fileID: 95296725}
   PlayerBoostDroneItem: {fileID: 0}
@@ -5032,8 +5026,14 @@ MonoBehaviour:
   PlayerVehicleItem: {fileID: 0}
   DroneBar: {fileID: 0}
   DroneBarSlider: {fileID: 0}
-  fovChangeSpeed: 5
   instructions: {fileID: 0}
+  hasVehicleItem: 0
+  hasDroneItem: 1
+  PlayerScore: 0
+  walkSpeed: 2
+  runSpeed: 7
+  mouseSensitivity: 3
+  fovChangeSpeed: 5
 --- !u!1001 &299817595
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11248,6 +11248,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -12092,6 +12093,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -12460,6 +12462,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -13093,7 +13096,6 @@ MonoBehaviour:
   dayDuration: 300
   stableDuration: 180
   nightIntensity: 0.05
-  timeText: {fileID: 0}
 --- !u!1001 &752365433
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13432,7 +13434,7 @@ AudioSource:
   m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 8ea0396b053d84bd2a516323bd39c324, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 8ea0396b053d84bd2a516323bd39c324, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -14121,15 +14123,15 @@ MonoBehaviour:
   sprayer: {fileID: 1506451860}
   basket: {fileID: 445809006}
   instantiateCar: {fileID: 332987431099281487, guid: b04dc5b9cb32c4324b3199c3e9e310ff, type: 3}
-  ToxicDroneItem: {fileID: 8434499818357885809, guid: 1d9af3cf8d0414bc69bf669a99c836b7, type: 3}
-  BoostDroneItem: {fileID: 5095193897930698399, guid: 1ca3263dcd6064dd1b952b178a9b711e, type: 3}
-  ToxicDroneSpawnPoint: {fileID: 95296725}
-  BoostDroneSpawnPoint: {fileID: 1719544828}
+  toxicDroneItem: {fileID: 0}
+  boostDroneItem: {fileID: 0}
+  toxicDroneSpawnPoint: {fileID: 0}
+  boostDroneSpawnPoint: {fileID: 0}
   isWatering: 0
   isPicked: 0
   hasVehicleItem: 0
   hasDroneItem: 0
-  EnemyScore: 0
+  enemyScore: 0
 --- !u!195 &800602695
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -21077,6 +21079,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -22303,6 +22306,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -22912,7 +22916,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 4f8768610a4a6476fa5c4f926e0bc558, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 4f8768610a4a6476fa5c4f926e0bc558, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
@@ -26901,6 +26905,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 7.12
   m_lineSpacing: 41.75
   m_lineSpacingMax: 0
@@ -31131,6 +31136,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -32526,6 +32532,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 41.75
   m_lineSpacingMax: 0
