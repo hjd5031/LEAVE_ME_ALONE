@@ -13018,12 +13018,12 @@ Light:
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
-    m_Resolution: -1
+    m_Resolution: 3
     m_CustomResolution: -1
     m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
+    m_Bias: 0.01
+    m_NormalBias: 0.74
+    m_NearPlane: 0.1
     m_CullingMatrixOverride:
       e00: 1
       e01: 0
@@ -14078,10 +14078,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   m_Graph: {fileID: 0}
   m_BlackboardVariableOverridesList: []
   m_IsInitialised: 0
   m_IsStarted: 0
+  NetcodeRunOnlyOnOwner: 0
   references:
     version: 2
     RefIds: []

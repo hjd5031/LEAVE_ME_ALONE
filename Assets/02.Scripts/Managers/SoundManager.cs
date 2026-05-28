@@ -54,8 +54,14 @@ public class SoundManager : Singleton<SoundManager>
         TomatoPick
     }
 
-    void Awake()
+    public override void Awake()
     {
+#if UNITY_SERVER
+        Debug.Log("[SoundManager] Disabled in UNITY_SERVER build.");
+        Destroy(gameObject);
+        return;
+#endif
+
         base.Awake();
         _bgmChannelIndex = bgmClips.Length;
         Init();
