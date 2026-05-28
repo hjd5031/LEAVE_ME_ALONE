@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -41,36 +42,79 @@ public class GameManager : Singleton<GameManager>
     private bool readInstructions1 = false;
     private bool readInstructions2 = false;
     private bool almostFinished = false;
+    private bool singlePlayerModeSelected = false;
 
     private bool bgm3Started = false; // ✅ WebGL 대응용 BGM3 재생 체크
 
+    public override void Awake()
+    {
+#if UNITY_SERVER
+        Debug.Log("[GameManager] Disabled in UNITY_SERVER build.");
+        Destroy(gameObject);
+        return;
+#endif
+
+#if MULTIPLAYER_BUILD
+        Debug.Log("[GameManager] Disabled in MULTIPLAYER_BUILD.");
+        Destroy(gameObject);
+        return;
+#endif
+
+        string activeSceneName = SceneManager.GetActiveScene().name;
+        if (IsMultiplayerScene(activeSceneName))
+        {
+            Debug.Log($"[GameManager] Disabled in multiplayer scene '{activeSceneName}'.");
+            Destroy(gameObject);
+            return;
+        }
+
+        base.Awake();
+    }
+
     void Start()
     {
+        if (IsMultiplayerScene(SceneManager.GetActiveScene().name))
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         SceneManager.sceneLoaded += OnSceneLoaded;
         // SceneManager.LoadScene("GameStartScene");
         SetSceneState(GameSceneState.GameStartScene);
         eraseCanvas = GameObject.FindGameObjectsWithTag("GameNameCanvas");
         instructionCanvas1 = GameObject.FindGameObjectsWithTag("Instructions");
-        instructionCanvas1[0].SetActive(false);
-        instructionCanvas1[1].SetActive(false);
+        if (instructionCanvas1 != null && instructionCanvas1.Length > 0)
+            instructionCanvas1[0].SetActive(false);
+        if (instructionCanvas1 != null && instructionCanvas1.Length > 1)
+            instructionCanvas1[1].SetActive(false);
     }
 
     void Update()
     {
         // ✅ GameStartScene → 입력 1번 → 설명 / 2번 → MainGameScene
-        if (CurrentSceneState == GameSceneState.GameStartScene)
+        if (CurrentSceneState == GameSceneState.GameStartScene && singlePlayerModeSelected)
         {
             if (!readInstructions1 && Input.anyKeyDown)
             {
                 foreach (var canvas in eraseCanvas)
-                    canvas.SetActive(false);
-                instructionCanvas1[0].SetActive(true);
+                {
+                    if (canvas != null)
+                        canvas.SetActive(false);
+                }
+
+                if (instructionCanvas1 != null && instructionCanvas1.Length > 0)
+                    instructionCanvas1[0].SetActive(true);
+
                 readInstructions1 = true;
             }
             else if (readInstructions1 && !readInstructions2 && Input.anyKeyDown)
             {
-                instructionCanvas1[0].SetActive(false);
-                instructionCanvas1[1].SetActive(true);
+                if (instructionCanvas1 != null && instructionCanvas1.Length > 0)
+                    instructionCanvas1[0].SetActive(false);
+                if (instructionCanvas1 != null && instructionCanvas1.Length > 1)
+                    instructionCanvas1[1].SetActive(true);
+
                 readInstructions2 = true;
             }
             else if (readInstructions1 && readInstructions2 &&Input.anyKeyDown)
@@ -141,6 +185,13 @@ public class GameManager : Singleton<GameManager>
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (IsMultiplayerScene(scene.name))
+        {
+            Debug.Log($"[GameManager] Destroying single-player GameManager in multiplayer scene '{scene.name}'.");
+            Destroy(gameObject);
+            return;
+        }
+
         if (scene.name == "MainGameScene" && !hasInitializedMainGame)
         {
             SetSceneState(GameSceneState.MainGame);
@@ -194,6 +245,19 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    private static bool IsMultiplayerScene(string sceneName)
+    {
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            return false;
+        }
+
+        return sceneName.IndexOf("Multiplayer", StringComparison.OrdinalIgnoreCase) >= 0 ||
+               sceneName.IndexOf("Multiplay", StringComparison.OrdinalIgnoreCase) >= 0 ||
+               sceneName.IndexOf("DedicatedServer", StringComparison.OrdinalIgnoreCase) >= 0 ||
+               sceneName.IndexOf("Network", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
     void CountTomatoes()
     {
         enemyTomatoes = FindObjectsByType<EnemyTomatoCtrl>(FindObjectsSortMode.None);
@@ -222,5 +286,11 @@ public class GameManager : Singleton<GameManager>
                 isGameOver = true;
                 break;
         }
+    }
+
+    public void BeginSinglePlayerMode()
+    {
+        singlePlayerModeSelected = true;
+        Debug.Log("[GameManager] Single Player mode selected. Existing intro flow is now enabled.");
     }
 }
