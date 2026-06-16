@@ -60,6 +60,11 @@ public class UgsDedicatedServerSession : MonoBehaviour
             return;
         }
 
+        if (!StartNetcodeServer(options))
+        {
+            return;
+        }
+
         try
         {
             Debug.Log($"{LogTag} Initializing Unity Services...");
@@ -164,14 +169,49 @@ public class UgsDedicatedServerSession : MonoBehaviour
         return true;
     }
 
+    private static bool StartNetcodeServer(ServerOptions options)
+    {
+        NetworkManager networkManager = NetworkManager.Singleton;
+        if (networkManager == null)
+        {
+            Debug.LogError($"{LogTag} NetworkManager.Singleton is missing. Cannot start NGO server.");
+            return false;
+        }
+
+        if (networkManager.IsListening)
+        {
+            Debug.Log($"{LogTag} NetworkManager is already listening.");
+            return true;
+        }
+
+        UnityTransport transport = networkManager.NetworkConfig.NetworkTransport as UnityTransport;
+        if (transport == null)
+        {
+            transport = networkManager.GetComponent<UnityTransport>();
+        }
+
+        if (transport == null)
+        {
+            Debug.LogError($"{LogTag} UnityTransport is missing on NetworkManager.");
+            return false;
+        }
+
+        networkManager.NetworkConfig.NetworkTransport = transport;
+        transport.SetConnectionData(options.PublishIp, options.Port, options.ListenIp);
+
+        bool started = networkManager.StartServer();
+        Debug.Log($"{LogTag} NGO StartServer requested. Listen={options.ListenIp}:{options.Port} Publish={options.PublishIp}:{options.Port} Started={started}");
+        return started;
+    }
+
     private static ServerOptions ParseServerOptions()
     {
         string[] args = Environment.GetCommandLineArgs();
         ServerOptions options = new ServerOptions
         {
-            Port = 7777,
-            ListenIp = "0.0.0.0",
-            PublishIp = "127.0.0.1",
+            Port = TomatoMultiplayerConstants.DefaultServerPort,
+            ListenIp = TomatoMultiplayerConstants.DefaultServerListenAddress,
+            PublishIp = TomatoMultiplayerConstants.DefaultServerAddress,
             MaxPlayers = 8,
             SessionName = "Tomato Co-op Server",
             ServerKey = Environment.GetEnvironmentVariable("UGS_SERVICE_ACCOUNT_KEY_ID"),

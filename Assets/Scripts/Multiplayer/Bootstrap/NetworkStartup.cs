@@ -9,8 +9,8 @@ public class NetworkStartup : MonoBehaviour
 {
     private const string LogTag = "[NetworkStartup]";
 
-    [SerializeField] private string defaultIp = "127.0.0.1";
-    [SerializeField] private ushort defaultPort = 7777;
+    [SerializeField] private string defaultIp = TomatoMultiplayerConstants.DefaultServerAddress;
+    [SerializeField] private ushort defaultPort = TomatoMultiplayerConstants.DefaultServerPort;
 
     private enum StartupMode
     {
@@ -196,9 +196,9 @@ public class NetworkStartup : MonoBehaviour
 
     private static void StartServer(UnityTransport transport, ushort port)
     {
-        transport.SetConnectionData("127.0.0.1", port, "0.0.0.0");
+        transport.SetConnectionData(TomatoMultiplayerConstants.DefaultServerAddress, port, TomatoMultiplayerConstants.DefaultServerListenAddress);
         bool started = NetworkManager.Singleton.StartServer();
-        Debug.Log($"{LogTag} StartServer requested. ListenAddress=0.0.0.0 Port={port} Started={started}");
+        Debug.Log($"{LogTag} StartServer requested. PublicAddress={TomatoMultiplayerConstants.DefaultServerAddress} ListenAddress={TomatoMultiplayerConstants.DefaultServerListenAddress} Port={port} Started={started}");
     }
 
     private static void StartClient(UnityTransport transport, string ip, ushort port)

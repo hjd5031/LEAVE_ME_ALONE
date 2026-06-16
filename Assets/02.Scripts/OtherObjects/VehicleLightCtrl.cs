@@ -11,7 +11,10 @@ public class VehicleLightCtrl : MonoBehaviour
     public int flickerCount = 6;              // 총 깜빡임 횟수 (짝수면 false로 끝나므로 5나 7 추천)
     public GameObject introCamera;
     public GameObject followCamera;
+    public bool usePictureInPicture = true;
+    public PipBroadcastView.ScreenCorner pipCorner = PipBroadcastView.ScreenCorner.TopRight;
     private GameObject crossHair;
+    private Transform activePipSource;
     
     
     private String CarEngineSoundID;
@@ -21,16 +24,27 @@ public class VehicleLightCtrl : MonoBehaviour
 
     void Awake()
     {
+        if (usePictureInPicture)
+            SetBroadcastCameraComponentsEnabled(false);
     }
     void Start()
     {
         SetEmission(false);
         crossHair = GameObject.FindWithTag("crossHair");
-        if(crossHair != null)
+        if(crossHair != null && !usePictureInPicture)
             crossHair.SetActive(false);
         CarEngineSoundID = SoundManager.Instance.Play3DSfx(SoundManager.Sfx.EngineStart,transform,1f);
-        introCamera.SetActive(true);
-        followCamera.SetActive(false);
+        if (usePictureInPicture)
+        {
+            ShowBroadcastCamera(introCamera);
+        }
+        else
+        {
+            if (introCamera != null)
+                introCamera.SetActive(true);
+            if (followCamera != null)
+                followCamera.SetActive(false);
+        }
         mudParticle.SetActive(false);
         StartCoroutine(FlickerSequence());
         // Invoke(nameof(TurnOffCameras),15f);
@@ -53,8 +67,17 @@ public class VehicleLightCtrl : MonoBehaviour
         // SoundManager.Instance.Play3DSfx(SoundManager.Sfx.CarHorn,transform,1f);
         // 마지막은 항상 true로 고정
         
-        introCamera.SetActive(false);
-        followCamera.SetActive(true);
+        if (usePictureInPicture)
+        {
+            ShowBroadcastCamera(followCamera);
+        }
+        else
+        {
+            if (introCamera != null)
+                introCamera.SetActive(false);
+            if (followCamera != null)
+                followCamera.SetActive(true);
+        }
         mudParticle.SetActive(true);
         SetLightsActive(true);
         SetEmission(true);
@@ -65,10 +88,19 @@ public class VehicleLightCtrl : MonoBehaviour
 
     void TurnOffCameras()
     {
-        introCamera.SetActive(false);
-        followCamera.SetActive(false);
+        if (usePictureInPicture)
+        {
+            HideBroadcastCamera();
+        }
+        else
+        {
+            if (introCamera != null)
+                introCamera.SetActive(false);
+            if (followCamera != null)
+                followCamera.SetActive(false);
+        }
         SoundManager.Instance.StopSfx(CarAccelerationSoundID);
-        if(crossHair != null && crossHair.activeSelf == false)
+        if(crossHair != null && !usePictureInPicture && crossHair.activeSelf == false)
             crossHair.SetActive(true);
         if (GameManager.Instance.PLayerUsingItem)
         {
@@ -106,5 +138,48 @@ public class VehicleLightCtrl : MonoBehaviour
     {
         Debug.Log("OnTriggerEnterVehicleLightCtrl");
         Invoke(nameof(TurnOffCameras),2f);
+    }
+
+    private void ShowBroadcastCamera(GameObject cameraObject)
+    {
+        if (cameraObject == null)
+            return;
+
+        SetBroadcastCameraComponentsEnabled(false);
+        cameraObject.SetActive(true);
+        activePipSource = cameraObject.transform;
+        PipBroadcastView.Show(activePipSource, pipCorner);
+    }
+
+    private void HideBroadcastCamera()
+    {
+        if (activePipSource != null)
+            PipBroadcastView.Hide(activePipSource);
+        else
+            PipBroadcastView.Hide();
+
+        activePipSource = null;
+    }
+
+    private void SetBroadcastCameraComponentsEnabled(bool isEnabled)
+    {
+        SetCameraObjectComponentsEnabled(introCamera, isEnabled);
+        SetCameraObjectComponentsEnabled(followCamera, isEnabled);
+    }
+
+    private static void SetCameraObjectComponentsEnabled(GameObject cameraObject, bool isEnabled)
+    {
+        if (cameraObject == null)
+            return;
+
+        foreach (Behaviour behaviour in cameraObject.GetComponents<Behaviour>())
+        {
+            if (behaviour == null)
+                continue;
+
+            string fullName = behaviour.GetType().FullName;
+            if (behaviour is Camera || behaviour is AudioListener || (fullName != null && fullName.StartsWith("Unity.Cinemachine")))
+                behaviour.enabled = isEnabled;
+        }
     }
 }

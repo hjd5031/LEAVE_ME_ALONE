@@ -43,6 +43,7 @@ public class GameManager : Singleton<GameManager>
     private bool readInstructions2 = false;
     private bool almostFinished = false;
     private bool singlePlayerModeSelected = false;
+    private int blockIntroInputUntilFrame = -1;
 
     private bool bgm3Started = false; // ✅ WebGL 대응용 BGM3 재생 체크
 
@@ -95,18 +96,14 @@ public class GameManager : Singleton<GameManager>
         // ✅ GameStartScene → 입력 1번 → 설명 / 2번 → MainGameScene
         if (CurrentSceneState == GameSceneState.GameStartScene && singlePlayerModeSelected)
         {
+            if (Time.frameCount <= blockIntroInputUntilFrame)
+            {
+                return;
+            }
+
             if (!readInstructions1 && Input.anyKeyDown)
             {
-                foreach (var canvas in eraseCanvas)
-                {
-                    if (canvas != null)
-                        canvas.SetActive(false);
-                }
-
-                if (instructionCanvas1 != null && instructionCanvas1.Length > 0)
-                    instructionCanvas1[0].SetActive(true);
-
-                readInstructions1 = true;
+                ShowFirstInstructionPage();
             }
             else if (readInstructions1 && !readInstructions2 && Input.anyKeyDown)
             {
@@ -291,6 +288,45 @@ public class GameManager : Singleton<GameManager>
     public void BeginSinglePlayerMode()
     {
         singlePlayerModeSelected = true;
-        Debug.Log("[GameManager] Single Player mode selected. Existing intro flow is now enabled.");
+        blockIntroInputUntilFrame = Time.frameCount + 1;
+        ShowFirstInstructionPage();
+        Debug.Log("[GameManager] Single Player mode selected. Showing instructions.");
+    }
+
+    private void ShowFirstInstructionPage()
+    {
+        if (eraseCanvas == null || eraseCanvas.Length == 0)
+        {
+            eraseCanvas = GameObject.FindGameObjectsWithTag("GameNameCanvas");
+        }
+
+        if (instructionCanvas1 == null || instructionCanvas1.Length == 0)
+        {
+            instructionCanvas1 = GameObject.FindGameObjectsWithTag("Instructions");
+        }
+
+        if (eraseCanvas != null)
+        {
+            foreach (var canvas in eraseCanvas)
+            {
+                if (canvas != null)
+                {
+                    canvas.SetActive(false);
+                }
+            }
+        }
+
+        if (instructionCanvas1 != null && instructionCanvas1.Length > 0 && instructionCanvas1[0] != null)
+        {
+            instructionCanvas1[0].SetActive(true);
+        }
+
+        if (instructionCanvas1 != null && instructionCanvas1.Length > 1 && instructionCanvas1[1] != null)
+        {
+            instructionCanvas1[1].SetActive(false);
+        }
+
+        readInstructions1 = true;
+        readInstructions2 = false;
     }
 }
