@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Multiplayer;
@@ -89,7 +90,8 @@ public class UgsCoopClient : MonoBehaviour
             };
 
             currentSession = await MultiplayerService.Instance.JoinSessionByCodeAsync(trimmedCode, joinOptions);
-            SetStatus($"Joined session. Waiting for NGO connection... Code={currentSession.Code}");
+            SetStatus($"Joined session. Connecting to {TomatoMultiplayerConstants.DefaultServerAddress}:{TomatoMultiplayerConstants.DefaultServerPort}... Code={currentSession.Code}");
+            ConnectToDedicatedServer();
         });
     }
 
@@ -121,7 +123,8 @@ public class UgsCoopClient : MonoBehaviour
             };
 
             currentSession = await MultiplayerService.Instance.MatchmakeSessionAsync(quickJoinOptions, sessionOptions);
-            SetStatus($"Matched session. Waiting for NGO connection... Code={currentSession.Code}");
+            SetStatus($"Matched session. Connecting to {TomatoMultiplayerConstants.DefaultServerAddress}:{TomatoMultiplayerConstants.DefaultServerPort}... Code={currentSession.Code}");
+            ConnectToDedicatedServer();
         });
     }
 
@@ -212,6 +215,45 @@ public class UgsCoopClient : MonoBehaviour
         }
 
         return true;
+    }
+
+    private bool ConnectToDedicatedServer()
+    {
+        NetworkManager networkManager = NetworkManager.Singleton;
+        if (networkManager == null)
+        {
+            SetStatus("NetworkManager is missing. Cannot start NGO client.");
+            return false;
+        }
+
+        if (networkManager.IsListening)
+        {
+            SetStatus("NetworkManager is already running.");
+            return false;
+        }
+
+        UnityTransport transport = networkManager.NetworkConfig.NetworkTransport as UnityTransport;
+        if (transport == null)
+        {
+            transport = networkManager.GetComponent<UnityTransport>();
+        }
+
+        if (transport == null)
+        {
+            SetStatus("UnityTransport is missing. Add UnityTransport to the NetworkManager GameObject.");
+            return false;
+        }
+
+        networkManager.NetworkConfig.NetworkTransport = transport;
+        transport.SetConnectionData(
+            TomatoMultiplayerConstants.DefaultServerAddress,
+            TomatoMultiplayerConstants.DefaultServerPort);
+
+        bool started = networkManager.StartClient();
+        SetStatus(started
+            ? $"NGO client started. Connecting to {TomatoMultiplayerConstants.DefaultServerAddress}:{TomatoMultiplayerConstants.DefaultServerPort}..."
+            : $"NGO client failed to start for {TomatoMultiplayerConstants.DefaultServerAddress}:{TomatoMultiplayerConstants.DefaultServerPort}.");
+        return started;
     }
 
     private void SetStatus(string message)
