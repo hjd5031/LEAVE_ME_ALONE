@@ -16,8 +16,7 @@ public class NetworkStartup : MonoBehaviour
     {
         None,
         Server,
-        Client,
-        Host
+        Client
     }
 
     private struct StartupOptions
@@ -44,7 +43,7 @@ public class NetworkStartup : MonoBehaviour
 
         if (options.Mode == StartupMode.None)
         {
-            Debug.Log($"{LogTag} No network mode selected. Use -mode server, -mode client, or -mode host.");
+            Debug.Log($"{LogTag} No network mode selected. Dedicated-server flow supports -mode server or -mode client.");
             return;
         }
 
@@ -119,10 +118,11 @@ public class NetworkStartup : MonoBehaviour
 
         if (string.Equals(mode, "host", StringComparison.OrdinalIgnoreCase))
         {
-            return StartupMode.Host;
+            Debug.LogWarning($"{LogTag} Host mode is disabled. This project is configured for dedicated server only.");
+            return StartupMode.None;
         }
 
-        Debug.LogWarning($"{LogTag} Unknown mode '{mode}'. Network startup skipped.");
+        Debug.LogWarning($"{LogTag} Unknown mode '{mode}'. Dedicated-server flow supports 'server' or 'client'.");
         return StartupMode.None;
     }
 
@@ -185,9 +185,6 @@ public class NetworkStartup : MonoBehaviour
             case StartupMode.Client:
                 StartClient(transport, options.Ip, options.Port);
                 break;
-            case StartupMode.Host:
-                StartHost(transport, options.Ip, options.Port);
-                break;
             default:
                 Debug.Log($"{LogTag} No network mode selected.");
                 break;
@@ -208,10 +205,4 @@ public class NetworkStartup : MonoBehaviour
         Debug.Log($"{LogTag} StartClient requested. ServerIp={ip} Port={port} Started={started}");
     }
 
-    private static void StartHost(UnityTransport transport, string ip, ushort port)
-    {
-        transport.SetConnectionData(ip, port, "0.0.0.0");
-        bool started = NetworkManager.Singleton.StartHost();
-        Debug.Log($"{LogTag} StartHost requested. Ip={ip} ListenAddress=0.0.0.0 Port={port} Started={started}");
-    }
 }

@@ -38880,7 +38880,7 @@ MonoBehaviour:
     Address: hwangjd.iptime.org
     Port: 7777
     WebSocketPath: /
-    ServerListenAddress: 0.0.0.0
+    ServerListenAddress: '::'
     ClientBindPort: 0
   DebugSimulator:
     PacketDelayMS: 0
@@ -38902,7 +38902,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 2128011873}
-    PlayerPrefab: {fileID: 0}
+    PlayerPrefab: {fileID: 297899510}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 749d2a38667658040b2bc1e54d925b70, type: 2}

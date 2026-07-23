@@ -142,7 +142,7 @@ public class NetworkScoreManager : NetworkBehaviour
         ScoreUpdatedClientRpc(clientId, 0);
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
+    [Rpc(SendTo.NotServer)]
     private void ScoreUpdatedClientRpc(ulong clientId, int score)
     {
         scoresByClientId[clientId] = score;
@@ -150,7 +150,7 @@ public class NetworkScoreManager : NetworkBehaviour
         OnScoreChanged?.Invoke(clientId, score);
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
+    [Rpc(SendTo.NotServer)]
     private void PlayerRemovedClientRpc(ulong clientId)
     {
         scoresByClientId.Remove(clientId);

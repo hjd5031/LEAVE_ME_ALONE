@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colors:
-    m_Keys: 
-    m_Values: []
+    m_Keys: 00000000
+    m_Values:
+    - {r: 0.0518167, g: 0.99999994, b: 0, a: 1}

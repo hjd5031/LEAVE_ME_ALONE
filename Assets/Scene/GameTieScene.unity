@@ -4834,23 +4834,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FPCamera: {fileID: 265406509}
-  sprayer: {fileID: 1039729178}
-  basket: {fileID: 1895407046}
-  walkSpeed: 2
-  runSpeed: 7
-  mouseSensitivity: 3
-  cameraTransform: {fileID: 634255788}
+  currentTarget: {fileID: 0}
   cineCameraList:
   - {fileID: 265406506}
   - {fileID: 1541195573}
   - {fileID: 366721646}
-  currentTarget: {fileID: 0}
-  hasVehicleItem: 0
-  hasDroneItem: 0
-  PlayerScore: 0
+  sprayer: {fileID: 1039729178}
+  basket: {fileID: 1895407046}
   CarItem: {fileID: 332987431099281487, guid: 75444bffb0938435c9de0ecfee7f2e1a, type: 3}
   ToxicDroneItem: {fileID: 1260814204893200998, guid: d221bf051b5984517b8bd5fb398a5d19, type: 3}
   BoostDroneItem: {fileID: 2124865030735178248, guid: cce5a69b8a7cf4631827e6b4386047be, type: 3}
+  cameraTransform: {fileID: 634255788}
   ToxicDroneSpawnPoint: {fileID: 1719544828}
   BoostDroneSpawnPoint: {fileID: 95296725}
   PlayerBoostDroneItem: {fileID: 0}
@@ -4858,6 +4852,13 @@ MonoBehaviour:
   PlayerVehicleItem: {fileID: 0}
   DroneBar: {fileID: 0}
   DroneBarSlider: {fileID: 0}
+  instructions: {fileID: 0}
+  hasVehicleItem: 0
+  hasDroneItem: 0
+  PlayerScore: 0
+  walkSpeed: 2
+  runSpeed: 7
+  mouseSensitivity: 3
   fovChangeSpeed: 5
 --- !u!1001 &299817595
 PrefabInstance:
@@ -7014,6 +7015,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -9625,6 +9627,21 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!4 &590242946
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 590242943}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1993, y: 297, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &590242947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9669,21 +9686,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!4 &590242946
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 590242943}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1993, y: 297, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &599257780
 GameObject:
   m_ObjectHideFlags: 0
@@ -11502,6 +11504,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -11783,6 +11786,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -12416,7 +12420,6 @@ MonoBehaviour:
   dayDuration: 300
   stableDuration: 180
   nightIntensity: 0.05
-  timeText: {fileID: 0}
 --- !u!1001 &752365433
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12755,7 +12758,7 @@ AudioSource:
   m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 8ea0396b053d84bd2a516323bd39c324, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 8ea0396b053d84bd2a516323bd39c324, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -13390,6 +13393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   m_Graph: {fileID: -7022731069577152766, guid: 60090d575f7544f78bcd89f9df0c41f3, type: 2}
   m_BlackboardVariableOverridesList:
   - rid: 7558958120231764342
@@ -13398,6 +13402,7 @@ MonoBehaviour:
   - rid: 194872380754493658
   m_IsInitialised: 0
   m_IsStarted: 0
+  NetcodeRunOnlyOnOwner: 0
   references:
     version: 2
     RefIds:
@@ -13476,15 +13481,15 @@ MonoBehaviour:
   sprayer: {fileID: 1506451860}
   basket: {fileID: 445809006}
   instantiateCar: {fileID: 332987431099281487, guid: b04dc5b9cb32c4324b3199c3e9e310ff, type: 3}
-  ToxicDroneItem: {fileID: 8434499818357885809, guid: 1d9af3cf8d0414bc69bf669a99c836b7, type: 3}
-  BoostDroneItem: {fileID: 5095193897930698399, guid: 1ca3263dcd6064dd1b952b178a9b711e, type: 3}
-  ToxicDroneSpawnPoint: {fileID: 95296725}
-  BoostDroneSpawnPoint: {fileID: 1719544828}
+  toxicDroneItem: {fileID: 0}
+  boostDroneItem: {fileID: 0}
+  toxicDroneSpawnPoint: {fileID: 0}
+  boostDroneSpawnPoint: {fileID: 0}
   isWatering: 0
   isPicked: 0
   hasVehicleItem: 0
   hasDroneItem: 0
-  EnemyScore: 0
+  enemyScore: 0
 --- !u!195 &800602695
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -14282,6 +14287,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 65.9
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -21392,6 +21398,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -21910,51 +21917,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &1384897611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1384897603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
-  m_RequiresOpaqueTextureOption: 2
-  m_CameraType: 0
-  m_Cameras:
-  - {fileID: 590242945}
-  m_RendererIndex: -1
-  m_VolumeLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  m_VolumeTrigger: {fileID: 0}
-  m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
-  m_AntialiasingQuality: 2
-  m_StopNaN: 0
-  m_Dithering: 0
-  m_ClearDepth: 1
-  m_AllowXRRendering: 1
-  m_AllowHDROutput: 1
-  m_UseScreenCoordOverride: 0
-  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
-  m_RequiresDepthTexture: 0
-  m_RequiresColorTexture: 0
-  m_Version: 2
-  m_TaaSettings:
-    m_Quality: 3
-    m_FrameInfluence: 0.1
-    m_JitterScale: 1
-    m_MipBias: 0
-    m_VarianceClampScale: 0.9
-    m_ContrastAdaptiveSharpening: 0
 --- !u!4 &1384897606
 Transform:
   m_ObjectHideFlags: 0
@@ -22013,7 +21975,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 1b5f0e61f317645fa898b0d31966550e, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 1b5f0e61f317645fa898b0d31966550e, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.316
@@ -22100,6 +22062,51 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1384897611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384897603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras:
+  - {fileID: 590242945}
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1001 &1387511812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23123,6 +23130,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 65.9
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -26473,6 +26481,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -30008,6 +30017,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

@@ -115,7 +115,7 @@ public class NetworkTomatoPlot : NetworkBehaviour
         return true;
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
+    [Rpc(SendTo.NotServer)]
     private void HarvestedClientRpc(ulong clientId, Vector3 harvestPosition)
     {
         Debug.Log($"{LogTag} Harvest VFX/SFX hook. ClientId={clientId} Position={harvestPosition}");

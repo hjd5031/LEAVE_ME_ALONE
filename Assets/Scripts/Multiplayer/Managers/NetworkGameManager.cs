@@ -115,7 +115,7 @@ public class NetworkGameManager : NetworkBehaviour
         MatchEndedClientRpc();
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
+    [Rpc(SendTo.NotServer)]
     private void MatchEndedClientRpc()
     {
         Debug.Log($"{LogTag} Match ended notification received on client.");
